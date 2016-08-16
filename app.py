@@ -55,7 +55,7 @@ def webook():
 
                 if messaging_event.get("message"):  # someone sent us a message
 
-                    text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]+'&tt=a&uw=y')
+                    text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
                     textp=json.loads(text1.text)
                     print(textp)
                     if textp['time_expression_list']:
