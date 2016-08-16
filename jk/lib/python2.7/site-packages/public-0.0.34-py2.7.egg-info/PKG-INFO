@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: public
+Version: 0.0.34
+Summary: @public decorator, public(*objects) function - add objects names to __all__
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: public __all__
+Platform: UNKNOWN

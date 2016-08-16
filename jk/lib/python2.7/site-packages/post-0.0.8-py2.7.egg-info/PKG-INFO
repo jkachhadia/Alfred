@@ -1,0 +1,13 @@
+Metadata-Version: 1.1
+Name: post
+Version: 0.0.8
+Summary: http POST dict
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: POST dict with http request variables
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment

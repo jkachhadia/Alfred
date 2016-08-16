@@ -1,0 +1,13 @@
+Metadata-Version: 1.1
+Name: get
+Version: 0.0.11
+Summary: http GET dict
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: GET dict with http request variables
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment

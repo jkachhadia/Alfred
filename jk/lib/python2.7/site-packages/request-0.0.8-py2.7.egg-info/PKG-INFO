@@ -1,0 +1,13 @@
+Metadata-Version: 1.1
+Name: request
+Version: 0.0.8
+Summary: http REQUEST (GET+POST) dict
+Home-page: UNKNOWN
+Author: UNKNOWN
+Author-email: UNKNOWN
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: request http
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Environment :: Web Environment
