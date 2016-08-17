@@ -95,7 +95,7 @@ def webook():
 
                 all_reminders = Event.query.all()
                 for i in all_reminders:
-                    if i.reminded=False:
+                    if i.reminded==False:
                         event_date = i.date
                                             # print event_date
                         if event_date == '':
