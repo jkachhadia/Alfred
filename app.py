@@ -94,7 +94,7 @@ def webook():
                                                 send_message(sender_id, "thank you sir, noted!")
 
                                 else:
-                                    send_message(messaging_event["sender"]["id"], "I have grown old! I can see time sir. sorry")
+                                    send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry")
                             else:
                                 send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
                     else:
