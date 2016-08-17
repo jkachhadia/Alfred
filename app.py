@@ -94,6 +94,7 @@ def webook():
                     pass
 
                 all_reminders = Event.query.filter_by(reminded=False).all()
+                print(all_reminders)
                 for i in all_reminders:
                     event_date = i.date
                                         # print event_date
@@ -105,7 +106,7 @@ def webook():
                         if a[0]<1440 :
                             senderid = i.sender_id
                             #print i.reminprint "chutiya"
-                            reminder_message = "Upcoming event " + i.name + "on" + str(i.date)
+                            reminder_message = "Upcoming event " + i.name + " on " + str(i.date)
                             send_message(senderid, reminder_message)
                             i.reminded=True
 
