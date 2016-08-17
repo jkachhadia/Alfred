@@ -67,22 +67,31 @@ def webook():
                             if t['precision'] == "day" or t['precision'] == "weekday":
                                 dates = t['actual_time']
                                 rtime = dates.split('-')
-                                if textp['entity_list']:
-                                    for e in textp['entity_list']:
-                                        event= e['form']
-                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                nowdate = datetime.now().date()
+                                a=divmod((evedate-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+                                if a[0]<0 :
+                                    send_message(sender_id, "Sir, you are late!")
                                 else:
-                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
-                                db.session.add(eve)
-                                db.session.commit()
+                                    if textp['entity_list']:
+                                        for e in textp['entity_list']:
+                                            event= e['form']
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                    else:
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                    db.session.add(eve)
+                                    db.session.commit()
+                                    send_message(sender_id, "thank you sir, noted!")
+
+
 
 
 
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
+                    send_message(sender_id, "What should I remind you sir?")
 
-                    send_message(sender_id, "got it, thanks!")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -106,7 +115,7 @@ def webook():
                             if a[0]<1440 :
                                 senderid = i.sender_id
                                 #print i.reminprint "chutiya"
-                                reminder_message = "Upcoming event " + i.name + " on " + str(i.date)
+                                reminder_message = "Sir,you have a event " + i.name + " on " + str(i.date) +" that's today :)"
                                 send_message(senderid, reminder_message)
                                 i.reminded=True
                                 db.session.add(i)
