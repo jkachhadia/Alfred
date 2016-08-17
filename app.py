@@ -34,6 +34,7 @@ class Event(db.Model):
 def verify():
     # when the endpoint is registered as a webhook, it must
     # return the 'hub.challenge' value in the query arguments
+
     if request.args.get("hub.mode") == "subscribe" and request.args.get("hub.challenge"):
         if not request.args.get("hub.verify_token") == VERIFY_TOKEN:
             return "Verification token mismatch", 403
@@ -65,11 +66,11 @@ def webook():
                             if t['precision'] == "day" or t['precision'] == "weekday":
                                 dates = t['actual_time']
                                 rtime = dates.split('-')
-                                try:
+                                if texp['entity_list']:
                                     for e in textp['entity_list']:
                                         event= e['form']
                                         eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
-                                except ValueError:
+                                else:
                                     eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
                                 db.session.add(eve)
                                 db.session.commit()
