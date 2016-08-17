@@ -61,6 +61,7 @@ def webook():
                         if messaging_event['message']['attachments'][0]['type'] == "image":
                             image_url = messaging_event['message']['attachments'][0]['payload']['url']
                             short_img_url = short_url(image_url)
+                            print(short_img_url)
                             correct_url = 'http://api.havenondemand.com/1/api/async/ocrdocument/v1?apikey=d8023014-ab1d-4831-9b2f-7b9946932405&url='+short_img_url
                             ptext= requests.get(correct_url)
                             job=json.loads(ptext.text)
@@ -127,7 +128,7 @@ def webook():
 
 
 
-        
+
 
 
                 if messaging_event.get("delivery"):  # delivery confirmation
