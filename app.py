@@ -61,17 +61,13 @@ def webook():
                         if messaging_event['message']['attachments'][0]['type'] == "image":
                             image_url = messaging_event['message']['attachments'][0]['payload']['url']
                             short_img_url = short_url(image_url)
-                            print(short_img_url)
                             correct_url = 'http://api.havenondemand.com/1/api/async/ocrdocument/v1?apikey=d8023014-ab1d-4831-9b2f-7b9946932405&url='+short_img_url
                             ptext= requests.get(correct_url)
                             job=json.loads(ptext.text)
-                            print(job)
                             data= requests.get('http://api.havenondemand.com/1/job/result/%s?apikey=d8023014-ab1d-4831-9b2f-7b9946932405' %job['jobID'])
                             dataload=json.loads(data.text)
-                            print(dataload)
                             if ((((dataload['actions'])[0]['result'])['text_block'])[0]['text']):
                                 impdata=((((dataload['actions'])[0]['result'])['text_block'])[0]['text'])
-
                                 text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+impdata+'&tt=a&uw=y')
                                 textp=json.loads(text1.text)
                                 print(textp)
@@ -96,8 +92,8 @@ def webook():
                                                 db.session.add(eve)
                                                 db.session.commit()
                                                 send_message(sender_id, "thank you sir, noted!")
-                                else:
-                                    send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
+                            else:
+                                send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
                     else:
 
                         text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
