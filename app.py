@@ -60,6 +60,7 @@ def webook():
                     if "attachments" in messaging_event['message']:
                         if messaging_event['message']['attachments'][0]['type'] == "image":
                             image_url = messaging_event['message']['attachments'][0]['payload']['url']
+                            a=0
                             short_img_url = short_url(image_url)
                             correct_url = 'http://api.havenondemand.com/1/api/async/ocrdocument/v1?apikey=d8023014-ab1d-4831-9b2f-7b9946932405&url='+short_img_url
                             ptext= requests.get(correct_url)
@@ -93,6 +94,10 @@ def webook():
                                                     db.session.add(eve)
                                                     db.session.commit()
                                                     send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                            if t['precision']=='minutesAMPM' and a==0:
+                                                send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
+                                                a=1
+
                                     else:
                                         send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
                             except IndexError:
