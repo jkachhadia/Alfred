@@ -68,6 +68,7 @@ def webook():
                             print(job)
                             data= requests.get('http://api.havenondemand.com/1/job/result/%s?apikey=d8023014-ab1d-4831-9b2f-7b9946932405' %job['jobID'])
                             dataload=json.loads(data.text)
+                            print(dataload)
                             try:
                                 impdata=((((dataload['actions'])[0]['result'])['text_block'])[0]['text'])
                                 print(impdata)
