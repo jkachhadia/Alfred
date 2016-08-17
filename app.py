@@ -92,6 +92,9 @@ def webook():
                                                 db.session.add(eve)
                                                 db.session.commit()
                                                 send_message(sender_id, "thank you sir, noted!")
+
+                                else:e
+                                    send_message(messaging_event["sender"]["id"], "I have grown old! I can see time sir. sorry")
                             else:
                                 send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
                     else:
