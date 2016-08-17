@@ -102,7 +102,7 @@ def webook():
                             continue
                         else:
                             nowdate = datetime.now().date()
-                            a=divmod((event_date-nowdate).days* 86400+ (datetime.utcnow()-current_user.mood_changed).seconds , 60)
+                            a=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
                             if a[0]<1440 :
                                 senderid = i.sender_id
                                 #print i.reminprint "chutiya"
