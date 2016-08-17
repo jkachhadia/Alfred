@@ -125,7 +125,7 @@ def webook():
                                             eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
                                         db.session.add(eve)
                                         db.session.commit()
-                                        send_message(sender_id, "thank you sir, noted!")
+                                        send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
                         else:
                             send_message(messaging_event["sender"]["id"], "What should I remind you sir?")
 
