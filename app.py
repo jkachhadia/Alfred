@@ -108,6 +108,7 @@ def webook():
                                 #print i.reminprint "chutiya"
                                 reminder_message = "Upcoming event " + i.name + "on" + str(i.date)
                                 send_message(senderid, reminder_message)
+                                i.reminded=True
 
     return "ok", 200
 
