@@ -159,7 +159,7 @@ def webook():
                             if a[0]<1440 :
                                 senderid = i.sender_id
                                 #print i.reminprint "chutiya"
-                                reminder_message = "Sir,you have a event " + i.name + " on " + str(i.date) +" that's today :)"
+                                reminder_message = "Sir,you have a event " + i.name + " on " + str(i.date) +". that's today :)"
                                 send_message(senderid, reminder_message)
                                 i.reminded=True
                                 db.session.add(i)
