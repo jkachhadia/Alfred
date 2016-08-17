@@ -93,9 +93,6 @@ def webook():
                                                     db.session.add(eve)
                                                     db.session.commit()
                                                     send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-
-                                            else:
-                                                send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time here sir. sorry :( Can you tell me the date and name of event?")
                                     else:
                                         send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
                             except IndexError:
