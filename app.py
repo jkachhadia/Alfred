@@ -6,7 +6,7 @@ import requests
 import json
 from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
+from datetime import datetime,date
 
 app=Flask(__name__)
 app.config.from_pyfile('app.cfg')
@@ -68,9 +68,9 @@ def webook():
                                 try:
                                     for e in textp['entity_list']:
                                         event= e['form']
-                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
                                 except ValueError:
-                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
                                 db.session.add(eve)
                                 db.session.commit()
 
