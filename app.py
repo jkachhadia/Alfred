@@ -98,7 +98,7 @@ def webook():
                                                 send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time here sir. sorry :( Can you tell me the date and name of event?")
                                     else:
                                         send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
-                            except ValueError:
+                            except IndexError:
                                 send_message(messaging_event["sender"]["id"], "I couldn't read that image sir!")
                     else:
 
