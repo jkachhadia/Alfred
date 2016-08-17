@@ -93,6 +93,8 @@ def webook():
                                                 db.session.commit()
                                                 send_message(sender_id, "thank you sir, noted!")
 
+                                        else:
+                                            send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry")        
                                 else:
                                     send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry")
                             else:
