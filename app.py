@@ -70,10 +70,12 @@ def webook():
                             dataload=json.loads(data.text)
                             try:
                                 impdata=((((dataload['actions'])[0]['result'])['text_block'])[0]['text'])
+                                print(impdata)
                             except KeyError:
                                 pass
                             text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+impdata+'&tt=a&uw=y')
                             textp=json.loads(text1.text)
+                            print(textp)
                             if textp['time_expression_list']:
                                 for t in textp['time_expression_list']:
                                     rtime = ""
