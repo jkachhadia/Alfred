@@ -66,7 +66,7 @@ def webook():
                             if t['precision'] == "day" or t['precision'] == "weekday":
                                 dates = t['actual_time']
                                 rtime = dates.split('-')
-                                if texp['entity_list']:
+                                if textp['entity_list']:
                                     for e in textp['entity_list']:
                                         event= e['form']
                                         eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
