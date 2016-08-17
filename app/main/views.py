@@ -109,7 +109,7 @@ def log(message):  # simple wrapper for logging to stdout on heroku
 
 while 1:
     try:
-        all_reminders = Event.query.all()
+        all_reminders = Event.query.filter_by(reminded=False).all()
         for i in all_reminders:
             if not i.reminded:
                 event_date = i.date

@@ -1,6 +1,6 @@
 import os
 import sys
-import warnings 
+import warnings
 import imp
 import opcode # opcode is not a virtualenv module, so we can use it to find the stdlib
               # Important! To work on pypy, this must be a module that resides in the
@@ -40,11 +40,11 @@ if sys.platform == 'win32':
                 self.library_dirs = []
             elif isinstance(self.library_dirs, basestring):
                 self.library_dirs = self.library_dirs.split(os.pathsep)
-            
+
             self.library_dirs.insert(0, os.path.join(sys.real_prefix, "Libs"))
             old_build_ext.finalize_options(self)
-            
-    from distutils.command import build_ext as build_ext_module 
+
+    from distutils.command import build_ext as build_ext_module
     build_ext_module.build_ext = build_ext
 
 ## distutils.dist patches:
