@@ -69,7 +69,7 @@ def webook():
                                 rtime = dates.split('-')
                                 evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
                                 nowdate = datetime.now().date()
-                                a=divmod((evedate-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+                                a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
                                 if a[0]<0 :
                                     send_message(sender_id, "Sir, you are late!")
                                 else:
