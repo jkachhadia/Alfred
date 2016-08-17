@@ -93,22 +93,22 @@ def webook():
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
 
-                all_reminders = Event.query.filter_by(reminded=False).all()
-                print(all_reminders)
+                all_reminders = Event.query.all()
                 for i in all_reminders:
-                    event_date = i.date
-                                        # print event_date
-                    if event_date == '':
-                        continue
-                    else:
-                        nowdate = datetime.now().date()
-                        a=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-                        if a[0]<1440 :
-                            senderid = i.sender_id
-                            #print i.reminprint "chutiya"
-                            reminder_message = "Upcoming event " + i.name + " on " + str(i.date)
-                            send_message(senderid, reminder_message)
-                            i.reminded=True
+                    if i.reminded=False:
+                        event_date = i.date
+                                            # print event_date
+                        if event_date == '':
+                            continue
+                        else:
+                            nowdate = datetime.now().date()
+                            a=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+                            if a[0]<1440 :
+                                senderid = i.sender_id
+                                #print i.reminprint "chutiya"
+                                reminder_message = "Upcoming event " + i.name + " on " + str(i.date)
+                                send_message(senderid, reminder_message)
+                                i.reminded=True
 
     return "ok", 200
 
