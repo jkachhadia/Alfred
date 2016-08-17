@@ -94,11 +94,11 @@ def webook():
                                                 send_message(sender_id, "thank you sir, noted!")
 
                                         else:
-                                            send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry")        
+                                            send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time here sir. sorry :( Can you tell me the date and name of event?")
                                 else:
-                                    send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry")
+                                    send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
                             else:
-                                send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
+                                send_message(messaging_event["sender"]["id"], "I couldn't read that image sir!")
                     else:
 
                         text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
