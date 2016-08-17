@@ -69,37 +69,35 @@ def webook():
                             data= requests.get('http://api.havenondemand.com/1/job/result/%s?apikey=d8023014-ab1d-4831-9b2f-7b9946932405' %job['jobID'])
                             dataload=json.loads(data.text)
                             print(dataload)
-                            try:
+                            if ((((dataload['actions'])[0]['result'])['text_block'])[0]['text']):
                                 impdata=((((dataload['actions'])[0]['result'])['text_block'])[0]['text'])
-                                print(impdata)
-                            except KeyError:
-                                pass
-                            text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+impdata+'&tt=a&uw=y')
-                            textp=json.loads(text1.text)
-                            print(textp)
-                            if textp['time_expression_list']:
-                                for t in textp['time_expression_list']:
-                                    rtime = ""
-                                    if t['precision'] == "day" or t['precision'] == "weekday":
-                                        dates = t['actual_time']
-                                        rtime = dates.split('-')
-                                        evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
-                                        nowdate = datetime.now().date()
-                                        a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
-                                        if a[0]<0 :
-                                            send_message(messaging_event["sender"]["id"], "Sir, you are late!")
-                                        else:
-                                            if textp['entity_list']:
-                                                for e in textp['entity_list']:
-                                                    event= e['form']
-                                                    eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+
+                                text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+impdata+'&tt=a&uw=y')
+                                textp=json.loads(text1.text)
+                                print(textp)
+                                if textp['time_expression_list']:
+                                    for t in textp['time_expression_list']:
+                                        rtime = ""
+                                        if t['precision'] == "day" or t['precision'] == "weekday":
+                                            dates = t['actual_time']
+                                            rtime = dates.split('-')
+                                            evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                            nowdate = datetime.now().date()
+                                            a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
+                                            if a[0]<0 :
+                                                send_message(messaging_event["sender"]["id"], "Sir, you are late!")
                                             else:
-                                                eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
-                                            db.session.add(eve)
-                                            db.session.commit()
-                                            send_message(sender_id, "thank you sir, noted!")
-                            else:
-                                send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
+                                                if textp['entity_list']:
+                                                    for e in textp['entity_list']:
+                                                        event= e['form']
+                                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                                else:
+                                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                                db.session.add(eve)
+                                                db.session.commit()
+                                                send_message(sender_id, "thank you sir, noted!")
+                                else:
+                                    send_message(messaging_event["sender"]["id"], "I couldn't read that image sir?")
                     else:
 
                         text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
