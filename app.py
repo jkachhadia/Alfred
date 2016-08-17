@@ -91,26 +91,7 @@ def webook():
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
 
-                while 1:
-                    try:
-                        all_reminders = Event.query.all()
-                        for i in all_reminders:
-                            if not i.reminded:
-                                event_date = i.date
-                                # print event_date
-                                if event_date == '':
-                                    continue
-                                else:
-                                    event_date = datetime.strptime(event_date, "%Y-%m-%d").date()
-                                    nowdate = datetime.now().date()
-                                    a=divmod((event_date-nowdate).days* 86400+ (datetime.utcnow()-current_user.mood_changed).seconds , 60)
-                                    if a[0]<1440 :
-                                        senderid = i.sender_id
-                        #print i.reminprint "chutiya"
-                                        reminder_message = "Upcoming event " + i.reminder + "on" + i.remindertime
-                                        send_message(senderid, reminder_message)
-                    except ValueError:
-                        continue
+
     return "ok", 200
 
 
