@@ -71,7 +71,7 @@ def webook():
                                 nowdate = datetime.now().date()
                                 a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
                                 if a[0]<0 :
-                                    send_message(sender_id, "Sir, you are late!")
+                                    send_message(messaging_event["sender"]["id"], "Sir, you are late!")
                                 else:
                                     if textp['entity_list']:
                                         for e in textp['entity_list']:
@@ -90,7 +90,7 @@ def webook():
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
-                    send_message(sender_id, "What should I remind you sir?")
+                    send_message(messaging_event["sender"]["id"], "What should I remind you sir?")
 
 
                 if messaging_event.get("delivery"):  # delivery confirmation
