@@ -82,7 +82,8 @@ def webook():
                                     db.session.add(eve)
                                     db.session.commit()
                                     send_message(sender_id, "thank you sir, noted!")
-
+                    else:
+                        send_message(messaging_event["sender"]["id"], "What should I remind you sir?")
 
 
 
@@ -90,7 +91,7 @@ def webook():
                     sender_id = messaging_event["sender"]["id"]        # the facebook ID of the person sending you the message
                     recipient_id = messaging_event["recipient"]["id"]  # the recipient's ID, which should be your page's facebook ID
                     message_text = messaging_event["message"]["text"]  # the message's text
-                    send_message(messaging_event["sender"]["id"], "What should I remind you sir?")
+
 
 
                 if messaging_event.get("delivery"):  # delivery confirmation
