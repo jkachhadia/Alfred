@@ -101,7 +101,6 @@ def webook():
                         if event_date == '':
                             continue
                         else:
-                            event_date = datetime.strptime(event_date, "%Y-%m-%d").date()
                             nowdate = datetime.now().date()
                             a=divmod((event_date-nowdate).days* 86400+ (datetime.utcnow()-current_user.mood_changed).seconds , 60)
                             if a[0]<1440 :
