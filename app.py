@@ -68,9 +68,9 @@ def webook():
                                 try:
                                     for e in textp['entity_list']:
                                         event= e['form']
-                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.date(rtime[0],rtime[1],rtime[2]))
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
                                 except ValueError:
-                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.date(rtime[0],rtime[1],rtime[2]))
+                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
                                 db.session.add(eve)
                                 db.session.commit()
 
