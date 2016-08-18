@@ -80,8 +80,8 @@ def webook():
                                             if (t['precision'] == "day" or t['precision'] == "weekday") and b==0:
                                                 dates = t['actual_time']
                                                 rtime = dates.split('-')
-                                                evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
-                                                nowdate = datetime.now().date()
+                                                evedate=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                                nowdate = datetime.datetime.now().date()
                                                 a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
                                                 if a[0]<0 :
                                                     send_message(messaging_event["sender"]["id"], "Sir, you are late!")
@@ -146,8 +146,8 @@ def webook():
                                 if ((t['precision'] == "day") or (t['precision'] == "weekday")) and b==0:
                                     dates = t['actual_time']
                                     rtime = dates.split('-')
-                                    evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
-                                    nowdate = datetime.now().date()
+                                    evedate=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                    nowdate = datetime.datetime.now().date()
                                     a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
                                     if a[0]<0 :
                                         send_message(messaging_event["sender"]["id"], "Sir, you are late!")
