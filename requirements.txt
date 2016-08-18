@@ -1,3 +1,4 @@
+APScheduler==3.2.0
 Flask==0.11.1
 Flask-SQLAlchemy==2.1
 Jinja2==2.8
@@ -6,7 +7,12 @@ SQLAlchemy==1.0.14
 Werkzeug==0.11.10
 argparse==1.2.1
 click==6.6
+funcsigs==1.0.2
+futures==3.0.5
 gunicorn==19.6.0
 itsdangerous==0.24
+pytz==2016.6.1
 requests==2.10.0
+six==1.10.0
+tzlocal==1.2.2
 wsgiref==0.1.2
