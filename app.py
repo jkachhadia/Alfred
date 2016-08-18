@@ -213,19 +213,12 @@ def webook():
 
                 all_reminders = Event.query.all()
                 for i in all_reminders:
-                    print(i.date)
-                    event_date = i.date
-                    nowdate = datetime.datetime.today()
-                    print(nowdate)
-                    e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-                    print(e[0])
                     if i.reminded==False:
                         event_date = i.date
                         nowdate = datetime.datetime.today()
                         e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-                        if e[0]<120 :
+                        if e[0]<420 :
                             senderid = i.sender_id
-                            #print i.reminprint "chutiya"
                             reminder_message = "Sir,you have a " + i.name + " after 2 hours!"
                             send_message(senderid, reminder_message)
                             i.reminded=True
