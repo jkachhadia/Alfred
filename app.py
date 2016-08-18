@@ -9,35 +9,6 @@ from flask_sqlalchemy import SQLAlchemy
 import datetime
 import time
 from datetime import date
-from apscheduler.schedulers.blocking import BlockingScheduler
-
-def message_job():
-    all_reminders = Event.query.all()
-    for i in all_reminders:
-        if i.reminded==False:
-            event_date = i.date
-            nowdate = datetime.datetime.today()
-            e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-            if (e[0]<450) and (e[0]>330) :
-                timeleft= (e[0]-330)/60.0
-                hr=timeleft-(timeleft%1)
-                mi=round((timeleft%1)*60,0)
-                senderid = i.sender_id
-                reminder_message = "Sir, you have a " + i.name + " after "+str(hr)+" hours and "+str(mi)+" minutes!"
-                send_message(senderid, reminder_message)
-                i.reminded=True
-                db.session.add(i)
-                db.session.commit()
-            elif e[0]<330:
-                i.reminded=True
-                send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
-                db.session.add(i)
-                db.session.commit()
-
-
-
-scheduler = BlockingScheduler()
-scheduler.add_job(message_job, 'interval', minutes=10)
 
 
 app=Flask(__name__)
@@ -249,29 +220,7 @@ def webook():
 
     return "ok", 200
 
-while 1:
-    all_reminders = Event.query.all()
-    for i in all_reminders:
-        if i.reminded==False:
-            event_date = i.date
-            nowdate = datetime.datetime.today()
-            e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-            if (e[0]<450) and (e[0]>330) :
-                timeleft= (e[0]-330)/60.0
-                hr=timeleft-(timeleft%1)
-                mi=round((timeleft%1)*60,0)
-                senderid = i.sender_id
-                reminder_message = "Sir, you have a " + i.name + " after "+str(hr)+" hours and "+str(mi)+" minutes!"
-                send_message(senderid, reminder_message)
-                i.reminded=True
-                db.session.add(i)
-                db.session.commit()
-            elif e[0]<330:
-                i.reminded=True
-                send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
-                db.session.add(i)
-                db.session.commit()
-        time.sleep(20)
+
 
 
 def send_message(recipient_id, message_text):
