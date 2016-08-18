@@ -169,6 +169,7 @@ def webook():
                                     if b==1 and c==1:
                                         eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
                                         db.session.add(eve)
+                                        print('hello')
                                         db.session.commit()
                                         send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
                                     elif b==0 and c==1 and d!=1:
