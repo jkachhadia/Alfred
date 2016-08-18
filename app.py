@@ -37,7 +37,7 @@ def message_job():
 
 
 scheduler = BlockingScheduler()
-scheduler.add_job(message_job, 'interval', minutes=1)
+scheduler.add_job(message_job, 'interval', minutes=10)
 
 
 app=Flask(__name__)
