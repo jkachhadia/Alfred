@@ -221,7 +221,7 @@ def webook():
                         if (e[0]<450) and (e[0]>330) :
                             timeleft= e[0]/60.0
                             senderid = i.sender_id
-                            reminder_message = "Sir, you have a " + i.name + " after "+timeleft+" hours!"
+                            reminder_message = "Sir, you have a " + i.name + " after "+str(timeleft)+" hours!"
                             send_message(senderid, reminder_message)
                             i.reminded=True
                             db.session.add(i)
