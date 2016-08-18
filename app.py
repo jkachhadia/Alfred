@@ -98,36 +98,19 @@ def webook():
 
 
 
-                                        if textp['entity_list']:
-                                            for e in textp['entity_list']:
-                                                event= e['form']
-                                                if b==1 and c==1:
-                                                    eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
-                                                    db.session.add(eve)
-                                                    db.session.commit()
-                                                    send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-                                                elif b==0 and c==1 and d!=1:
-                                                    send_message(messaging_event["sender"]["id"], "I can't read date sir!")
-                                                elif b==1 and c==0:
-                                                    eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
-                                                    db.session.add(eve)
-                                                    db.session.commit()
-                                                    send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
 
-
-                                        else:
-                                            if b==1 and c==1:
-                                                eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
-                                                db.session.add(eve)
-                                                db.session.commit()
-                                                send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-                                            elif b==0 and c==1 and d!=1:
-                                                send_message(messaging_event["sender"]["id"], "I can't read date sir!")
-                                            elif b==1 and c==0:
-                                                eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
-                                                db.session.add(eve)
-                                                db.session.commit()
-                                                send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                        if b==1 and c==1:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                        elif b==0 and c==1 and d!=1:
+                                            send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                        elif b==1 and c==0:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
 
                                     else:
                                         send_message(messaging_event["sender"]["id"], "I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
@@ -168,11 +151,10 @@ def webook():
                                     if b==1 and c==1:
                                         eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
                                         db.session.add(eve)
-                                        print('hello')
                                         db.session.commit()
                                         send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
                                     elif b==0 and c==1 and d!=1:
-                                        send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                        send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
                                     elif b==1 and c==0:
                                         eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
                                         db.session.add(eve)
