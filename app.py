@@ -7,7 +7,7 @@ import json
 from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
 import datetime
-from time import sleep
+import time
 from datetime import date
 from apscheduler.schedulers.blocking import BlockingScheduler
 
@@ -249,6 +249,30 @@ def webook():
 
     return "ok", 200
 
+while 1:
+    all_reminders = Event.query.all()
+    for i in all_reminders:
+        if i.reminded==False:
+            event_date = i.date
+            nowdate = datetime.datetime.today()
+            e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+            if (e[0]<450) and (e[0]>330) :
+                timeleft= (e[0]-330)/60.0
+                hr=timeleft-(timeleft%1)
+                mi=round((timeleft%1)*60,0)
+                senderid = i.sender_id
+                reminder_message = "Sir, you have a " + i.name + " after "+str(hr)+" hours and "+str(mi)+" minutes!"
+                send_message(senderid, reminder_message)
+                i.reminded=True
+                db.session.add(i)
+                db.session.commit()
+            elif e[0]<330:
+                i.reminded=True
+                send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
+                db.session.add(i)
+                db.session.commit()
+        time.sleep(20)
+
 
 def send_message(recipient_id, message_text):
 
@@ -281,5 +305,3 @@ def log(message):  # simple wrapper for logging to stdout on heroku
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-scheduler.start()
