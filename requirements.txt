@@ -13,6 +13,7 @@ gunicorn==19.6.0
 itsdangerous==0.24
 pytz==2016.6.1
 requests==2.10.0
+schedule==0.3.2
 six==1.10.0
 tzlocal==1.2.2
 wsgiref==0.1.2
