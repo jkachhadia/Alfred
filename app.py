@@ -228,7 +228,8 @@ def webook():
                         elif e[0]<330:
                             i.reminded=True
                             send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
-
+                            db.session.add(i)
+                            db.session.commit()
 
 
     return "ok", 200
