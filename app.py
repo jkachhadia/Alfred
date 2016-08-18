@@ -143,7 +143,7 @@ def webook():
                         if textp['time_expression_list']:
                             for t in textp['time_expression_list']:
 
-                                if (t['precision'] == "day" or t['precision'] == "weekday") and b==0:
+                                if ((t['precision'] == "day") or (t['precision'] == "weekday")) and b==0:
                                     dates = t['actual_time']
                                     rtime = dates.split('-')
                                     evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
@@ -155,13 +155,15 @@ def webook():
                                     else:
                                         b=1
 
-                                if (t['precision']=='minutesAMPM' or t['precision']=='hourAMPM') and c==0:
+                                if ((t['precision']=='minutesAMPM') or (t['precision']=='hourAMPM')) and c==0:
                                     times=t['actual_time']
                                     times=times.split(' ')
                                     times=times[0].split(':')
                                     c=1
 
-
+                            print(b)
+                            print(c)
+                            print(d)
 
                             if textp['entity_list']:
                                 for e in textp['entity_list']:
