@@ -1,0 +1,7 @@
+README.rst
+setup.cfg
+schedule/__init__.py
+schedule.egg-info/PKG-INFO
+schedule.egg-info/SOURCES.txt
+schedule.egg-info/dependency_links.txt
+schedule.egg-info/top_level.txt
