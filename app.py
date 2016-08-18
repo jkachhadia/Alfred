@@ -170,7 +170,7 @@ def webook():
                                     db.session.commit()
                                     send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
                                 elif b==0 and c==1 and d!=1:
-                                    send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                    send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
                                 elif b==1 and c==0:
                                     eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
                                     db.session.add(eve)
