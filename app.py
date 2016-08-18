@@ -146,7 +146,7 @@ def webook():
                                 if ((t['precision'] == "day") or (t['precision'] == "weekday")) and b==0:
                                     dates = t['actual_time']
                                     rtime = dates.split('-')
-                                    evedate=datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                    evedate=datetime.datetime.date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
                                     nowdate = datetime.datetime.now().date()
                                     a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
                                     if a[0]<0 :
@@ -224,6 +224,11 @@ def webook():
                             i.reminded=True
                             db.session.add(i)
                             db.session.commit()
+                        elif e[0]<330:
+                            i.reminded=True
+                            send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
+
+
 
     return "ok", 200
 
