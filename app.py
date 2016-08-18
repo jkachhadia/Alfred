@@ -215,6 +215,10 @@ def webook():
                 all_reminders = Event.query.all()
                 for i in all_reminders:
                     print(i.date)
+                    event_date = i.date
+                    nowdate = datetime.now()
+                    e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+                    print(e[0])
                     if i.reminded==False:
                         event_date = i.date
                         nowdate = datetime.now()
