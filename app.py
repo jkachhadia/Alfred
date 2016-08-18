@@ -28,7 +28,7 @@ class Event(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     sender_id=db.Column(db.String(100))
     name=db.Column(db.String(100),default='event')
-    date=db.Column(db.Date)
+    date=db.Column(db.DateTime)
     reminded=db.Column(db.Boolean,default=False)
 
 @app.route('/', methods=['GET'])
@@ -60,7 +60,9 @@ def webook():
                     if "attachments" in messaging_event['message']:
                         if messaging_event['message']['attachments'][0]['type'] == "image":
                             image_url = messaging_event['message']['attachments'][0]['payload']['url']
-                            a=0
+                            b=0
+                            c=0
+                            d=0
                             short_img_url = short_url(image_url)
                             correct_url = 'http://api.havenondemand.com/1/api/async/ocrdocument/v1?apikey=d8023014-ab1d-4831-9b2f-7b9946932405&url='+short_img_url
                             ptext= requests.get(correct_url)
@@ -75,8 +77,7 @@ def webook():
                                     print(textp)
                                     if textp['time_expression_list']:
                                         for t in textp['time_expression_list']:
-                                            rtime = ""
-                                            if t['precision'] == "day" or t['precision'] == "weekday":
+                                            if (t['precision'] == "day" or t['precision'] == "weekday") and b==0:
                                                 dates = t['actual_time']
                                                 rtime = dates.split('-')
                                                 evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
@@ -84,47 +85,111 @@ def webook():
                                                 a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
                                                 if a[0]<0 :
                                                     send_message(messaging_event["sender"]["id"], "Sir, you are late!")
+                                                    d=1
                                                 else:
-                                                    if textp['entity_list']:
-                                                        for e in textp['entity_list']:
-                                                            event= e['form']
-                                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
-                                                    else:
-                                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                                    b=1
+
+                                            if (t['precision']=='minutesAMPM' or t['precision']=='hourAMPM') and c==0:
+                                                times=t['actual_time']
+                                                times=times.split(' ')
+                                                times=times[0].split(':')
+                                                c=1
+
+
+
+                                        if textp['entity_list']:
+                                            for e in textp['entity_list']:
+                                                event= e['form']
+                                                if b==1 and c==1:
+                                                    eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
                                                     db.session.add(eve)
                                                     db.session.commit()
                                                     send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-                                            if t['precision']=='minutesAMPM' and a==0:
-                                                send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
-                                                a=1
+                                                elif b==0 and c==1 and d!=1:
+                                                    send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                                elif b==1 and c==0:
+                                                    eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                                    db.session.add(eve)
+                                                    db.session.commit()
+                                                    send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+
+
+                                        else:
+                                            if b==1 and c==1:
+                                                eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                                db.session.add(eve)
+                                                db.session.commit()
+                                                send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                            elif b==0 and c==1 and d!=1:
+                                                send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                            elif b==1 and c==0:
+                                                eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                                db.session.add(eve)
+                                                db.session.commit()
+                                                send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
 
                                     else:
-                                        send_message(messaging_event["sender"]["id"], "I have grown old! I can't see time sir. sorry :( Can you tell me the date and name of event?")
+                                        send_message(messaging_event["sender"]["id"], "I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
                             except IndexError:
-                                send_message(messaging_event["sender"]["id"], "I couldn't read that image sir!")
+                                send_message(messaging_event["sender"]["id"],"I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
                     else:
 
                         text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
                         textp=json.loads(text1.text)
                         print(textp)
+                        b=0
+                        c=0
+                        d=0
                         if textp['time_expression_list']:
                             for t in textp['time_expression_list']:
-                                rtime = ""
-                                if t['precision'] == "day" or t['precision'] == "weekday":
-                                    dates = t['actual_time']
-                                    rtime = dates.split('-')
-                                    evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
-                                    nowdate = datetime.now().date()
-                                    a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
-                                    if a[0]<0 :
-                                        send_message(messaging_event["sender"]["id"], "Sir, you are late!")
-                                    else:
-                                        if textp['entity_list']:
-                                            for e in textp['entity_list']:
-                                                event= e['form']
-                                                eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                for t in textp['time_expression_list']:
+                                    if (t['precision'] == "day" or t['precision'] == "weekday") and b==0:
+                                        dates = t['actual_time']
+                                        rtime = dates.split('-')
+                                        evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                        nowdate = datetime.now().date()
+                                        a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
+                                        if a[0]<0 :
+                                            send_message(messaging_event["sender"]["id"], "Sir, you are late!")
+                                            d=1
                                         else:
-                                            eve=Event(sender_id= messaging_event["sender"]["id"],date=date(int(rtime[0]),int(rtime[1]),int(rtime[2])))
+                                            b=1
+
+                                    if (t['precision']=='minutesAMPM' or t['precision']=='hourAMPM') and c==0:
+                                        times=t['actual_time']
+                                        times=times.split(' ')
+                                        times=times[0].split(':')
+                                        c=1
+
+
+
+                                if textp['entity_list']:
+                                    for e in textp['entity_list']:
+                                        event= e['form']
+                                        if b==1 and c==1:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                        elif b==0 and c==1 and d!=1:
+                                            send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                        elif b==1 and c==0:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+
+
+                                else:
+                                    if b==1 and c==1:
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                        db.session.add(eve)
+                                        db.session.commit()
+                                        send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                    elif b==0 and c==1 and d!=1:
+                                        send_message(messaging_event["sender"]["id"], "I can't read date sir!")
+                                    elif b==1 and c==0:
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
                                         db.session.add(eve)
                                         db.session.commit()
                                         send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
@@ -154,12 +219,12 @@ def webook():
                         if event_date == '':
                             continue
                         else:
-                            nowdate = datetime.now().date()
+                            nowdate = datetime.utcnow()
                             a=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-                            if a[0]<1440 :
+                            if a[0]<120 :
                                 senderid = i.sender_id
                                 #print i.reminprint "chutiya"
-                                reminder_message = "Sir,you have a event " + i.name + " on " + str(i.date) +". that's today :)"
+                                reminder_message = "Sir,you have a " + i.name + " after 2 hours!"
                                 send_message(senderid, reminder_message)
                                 i.reminded=True
                                 db.session.add(i)
