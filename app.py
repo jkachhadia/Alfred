@@ -217,20 +217,16 @@ def webook():
                     print(i.date)
                     if i.reminded==False:
                         event_date = i.date
-                                            # print event_date
-                        if event_date == '':
-                            continue
-                        else:
-                            nowdate = datetime.now()
-                            a=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-                            if a[0]<120 :
-                                senderid = i.sender_id
-                                #print i.reminprint "chutiya"
-                                reminder_message = "Sir,you have a " + i.name + " after 2 hours!"
-                                send_message(senderid, reminder_message)
-                                i.reminded=True
-                                db.session.add(i)
-                                db.session.commit()
+                        nowdate = datetime.now()
+                        e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+                        if e[0]<120 :
+                            senderid = i.sender_id
+                            #print i.reminprint "chutiya"
+                            reminder_message = "Sir,you have a " + i.name + " after 2 hours!"
+                            send_message(senderid, reminder_message)
+                            i.reminded=True
+                            db.session.add(i)
+                            db.session.commit()
 
     return "ok", 200
 
