@@ -161,10 +161,6 @@ def webook():
                                     times=times[0].split(':')
                                     c=1
 
-                            print(b)
-                            print(c)
-                            print(d)
-
                             if textp['entity_list']:
                                 for e in textp['entity_list']:
                                     event= e['form']
@@ -220,6 +216,7 @@ def webook():
                     print(i.date)
                     event_date = i.date
                     nowdate = datetime.datetime.today()
+                    print(nowdate)
                     e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
                     print(e[0])
                     if i.reminded==False:
