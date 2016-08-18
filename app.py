@@ -219,8 +219,9 @@ def webook():
                         nowdate = datetime.datetime.today()
                         e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
                         if (e[0]<450) and (e[0]>330) :
+                            timeleft= e[0]/60.0
                             senderid = i.sender_id
-                            reminder_message = "Sir, you have a " + i.name + " after 2 hours!"
+                            reminder_message = "Sir, you have a " + i.name + " after "+timeleft+" hours!"
                             send_message(senderid, reminder_message)
                             i.reminded=True
                             db.session.add(i)
