@@ -221,7 +221,7 @@ def webook():
                         if event_date == '':
                             continue
                         else:
-                            nowdate = datetime.utcnow()
+                            nowdate = datetime.now()
                             a=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
                             if a[0]<120 :
                                 senderid = i.sender_id
