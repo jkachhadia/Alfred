@@ -5,12 +5,14 @@ Jinja2==2.8
 MarkupSafe==0.23
 SQLAlchemy==1.0.14
 Werkzeug==0.11.10
+apiai==1.0.2
 argparse==1.2.1
 click==6.6
 funcsigs==1.0.2
 futures==3.0.5
 gunicorn==19.6.0
 itsdangerous==0.24
+numpy==1.11.1
 pytz==2016.6.1
 requests==2.10.0
 schedule==0.3.2

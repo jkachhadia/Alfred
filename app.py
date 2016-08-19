@@ -8,6 +8,24 @@ from flask import Flask,request
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from datetime import date
+import apiai
+def main(query,sessionid):
+    ai = apiai.ApiAI('13537e5537c543b78b713852b76ff0f3 ')
+
+    request = ai.text_request()
+
+    request.lang = 'en'  # optional, default value equal 'en'
+
+    request.session_id = sessionid
+
+    request.query = query
+
+    response = request.getresponse()
+    response=json.loads(response.text)
+
+    send_message(sessionid, response['fulfillment']['speech'])
+
+
 
 
 
@@ -179,7 +197,7 @@ def webook():
                                     db.session.commit()
                                     send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
                         else:
-                            send_message(messaging_event["sender"]["id"], "What should I remind you sir?")
+                            main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
 
 
 
