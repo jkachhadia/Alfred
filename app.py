@@ -21,7 +21,6 @@ def main(query,sessionid):
     request.query = query
 
     response = request.getresponse()
-    response=json.loads(response.text)
 
     send_message(sessionid, response['fulfillment']['speech'])
 
