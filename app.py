@@ -24,7 +24,7 @@ def main(query,sessionid):
     response=json.loads(response.read())
     print(response)
 
-    send_message(sessionid, response['fulfillment']['speech'])
+    send_message(sessionid, response['result']['fulfillment']['speech'])
 
 
 
