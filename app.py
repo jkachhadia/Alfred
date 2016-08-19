@@ -22,6 +22,7 @@ def main(query,sessionid):
 
     response = request.getresponse()
     response=json.loads(response.read())
+    print(response)
 
     send_message(sessionid, response['fulfillment']['speech'])
 
