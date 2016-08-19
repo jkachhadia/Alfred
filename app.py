@@ -145,60 +145,64 @@ def webook():
                         b=0
                         c=0
                         d=0
-                        if textp['time_expression_list']:
-                            for t in textp['time_expression_list']:
+                        try:
+                            if textp['time_expression_list']:
+                                for t in textp['time_expression_list']:
 
-                                if ((t['precision'] == "day") or (t['precision'] == "weekday")) and b==0:
-                                    dates = t['actual_time']
-                                    rtime = dates.split('-')
-                                    evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
-                                    nowdate = datetime.datetime.now().date()
-                                    a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
-                                    if a[0]<0 :
-                                        send_message(messaging_event["sender"]["id"], "Sir, you are late!")
-                                        d=1
-                                    else:
-                                        b=1
+                                    if ((t['precision'] == "day") or (t['precision'] == "weekday")) and b==0:
+                                        dates = t['actual_time']
+                                        rtime = dates.split('-')
+                                        evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                        nowdate = datetime.datetime.now().date()
+                                        a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
+                                        if a[0]<0 :
+                                            send_message(messaging_event["sender"]["id"], "Sir, you are late!")
+                                            d=1
+                                        else:
+                                            b=1
 
-                                if ((t['precision']=='minutesAMPM') or (t['precision']=='hourAMPM')) and c==0:
-                                    times=t['actual_time']
-                                    times=times.split(' ')
-                                    times=times[0].split(':')
-                                    c=1
+                                    if ((t['precision']=='minutesAMPM') or (t['precision']=='hourAMPM')) and c==0:
+                                        times=t['actual_time']
+                                        times=times.split(' ')
+                                        times=times[0].split(':')
+                                        c=1
 
-                            if textp['entity_list']:
-                                for e in textp['entity_list']:
-                                    event= e['form']
+                                if textp['entity_list']:
+                                    for e in textp['entity_list']:
+                                        event= e['form']
+                                        if b==1 and c==1:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                        elif b==0 and c==1 and d!=1:
+                                            send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
+                                        elif b==1 and c==0:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+
+
+                                else:
                                     if b==1 and c==1:
-                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
                                         db.session.add(eve)
+                                        print('hello')
                                         db.session.commit()
                                         send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
                                     elif b==0 and c==1 and d!=1:
                                         send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
                                     elif b==1 and c==0:
-                                        eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
                                         db.session.add(eve)
                                         db.session.commit()
                                         send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-
-
                             else:
-                                if b==1 and c==1:
-                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
-                                    db.session.add(eve)
-                                    print('hello')
-                                    db.session.commit()
-                                    send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-                                elif b==0 and c==1 and d!=1:
-                                    send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
-                                elif b==1 and c==0:
-                                    eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
-                                    db.session.add(eve)
-                                    db.session.commit()
-                                    send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
-                        else:
+                                main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+                        except KeyError:
                             main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+
 
 
 
