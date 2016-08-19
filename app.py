@@ -212,13 +212,10 @@ def webook():
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
-
                 if messaging_event.get("optin"):  # optin confirmation
                     pass
-
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
-
                 all_reminders = Event.query.all()
                 for i in all_reminders:
                     if i.reminded==False:
