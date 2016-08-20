@@ -53,6 +53,11 @@ class Event(db.Model):
     date=db.Column(db.DateTime)
     reminded=db.Column(db.Boolean,default=False)
 
+class Subscriber(db.Model):
+    __tablename_='subscribers'
+    id=db.Column(db.Integer,primary_key=True)
+    sub_id=db.Column(db.String(100))
+
 @app.route('/', methods=['GET'])
 def verify():
     # when the endpoint is registered as a webhook, it must
@@ -137,6 +142,19 @@ def webook():
                                         send_message(messaging_event["sender"]["id"], "I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
                             except IndexError:
                                 send_message(messaging_event["sender"]["id"],"I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
+                    elif (messaging_event["message"]["text"]=="subscribe" or messaging_event["message"]["text"]=="Subscribe"):
+                        query=Subscriber.query.filter_by(sub_id=messaging_event["sender"]["id"]).first()
+                        if query is None:
+                            sub=Subscriber(sub_id=messaging_event["sender"]["id"])
+                            db.session.add(sub)
+                            db.session.commit()
+                            a=Subscriber.query.all()
+                            a=len(a)
+                            print(a)
+                            send_message(messaging_event["sender"]["id"],"You are subscriber no "+str(a)+" sir! thanks")
+                        else:
+                            send_message(messaging_event["sender"]["id"],"You are already subscribed sir!")
+
                     else:
 
                         text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
@@ -266,6 +284,14 @@ def send_message(recipient_id, message_text):
     if r.status_code != 200:
         log(r.status_code)
         log(r.text)
+
+@app.route('/<message>', methods=['GET','POST'])
+def mass(message):
+    subs=Subscriber.query.all()
+    for user in subs:
+        send_message(user.sub_id,message)
+    return "ok", 200
+
 
 
 def log(message):  # simple wrapper for logging to stdout on heroku
