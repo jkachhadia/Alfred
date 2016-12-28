@@ -35,8 +35,8 @@ app=Flask(__name__)
 app.config.from_pyfile('app.cfg')
 db = SQLAlchemy(app)
 
-PAGE_ACCESS_TOKEN = "EAAEMH5yZAxtABAIi5RjBMuW5ttS3kgZCOIM1LM92nZBp6ZAMZCg1NPleNMmKsRfS2Jbb4FrYeXca1knaalZBLJf7UCGj3XfBCZBn5YW1w0ZBkY4zhOZASW5Uf75IMJ0P7gIkPBlfZAnv4sYLi75V4EvZC6maLgvriPfaSB1sgHYXAo1gwZDZD"
-VERIFY_TOKEN = "alfred"
+PAGE_ACCESS_TOKEN = "EAAYUNKfFZCuABAOLNNzAQxrmgbAqrD1m9DRkB0WrCZB8zOEPyI4ilHyWSvvifXArhEPNkxKT7LiNc4u4s7VL1tltMr9JL6IisLM0VXQrs6OYLeSK28lk5pXdEhod4qiioC6TeJN74NqbmKqQwIBlpbNUmCXvTcPnJSFFjMAwZDZD"
+VERIFY_TOKEN = "alfred-svnit"
 
 def short_url(url):
     post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyB0N1UrT-OxThltr9Lr1bb1IeCuYma-rro'
