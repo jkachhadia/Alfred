@@ -5,7 +5,7 @@ import sys
 import requests
 import json
 from flask import Flask,request
-from flask_sqlalchemy import SQLAlchemy
+from pymongo import MongoClient
 import datetime
 from datetime import date
 import apiai
@@ -26,14 +26,10 @@ def main(query,sessionid):
 
     send_message(sessionid, response['result']['fulfillment']['speech'])
 
-
-
-
-
-
 app=Flask(__name__)
 app.config.from_pyfile('app.cfg')
-db = SQLAlchemy(app)
+client = MongoClient(CONNECTION)
+db = client.alfred
 
 PAGE_ACCESS_TOKEN = "EAAYUNKfFZCuABAOLNNzAQxrmgbAqrD1m9DRkB0WrCZB8zOEPyI4ilHyWSvvifXArhEPNkxKT7LiNc4u4s7VL1tltMr9JL6IisLM0VXQrs6OYLeSK28lk5pXdEhod4qiioC6TeJN74NqbmKqQwIBlpbNUmCXvTcPnJSFFjMAwZDZD"
 VERIFY_TOKEN = "alfred-svnit"
@@ -44,19 +40,6 @@ def short_url(url):
     response = requests.post(post_url,params,headers={'Content-Type': 'application/json'})
     response1=json.loads(response.text)
     return response1['id']
-
-class Event(db.Model):
-    __tablename__='events'
-    id=db.Column(db.Integer,primary_key=True)
-    sender_id=db.Column(db.String(100))
-    name=db.Column(db.String(100),default='event')
-    date=db.Column(db.DateTime)
-    reminded=db.Column(db.Boolean,default=False)
-
-class Subscriber(db.Model):
-    __tablename_='subscribers'
-    id=db.Column(db.Integer,primary_key=True)
-    sub_id=db.Column(db.String(100))
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -84,6 +67,8 @@ def webook():
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
+                    if "note" in messaging_event['message']['text']:
+                        send_message(messaging_event['sender']['id'], 'What is your adm no?')
                     
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -91,28 +76,6 @@ def webook():
                     pass
                 if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
                     pass
-                all_reminders = Event.query.all()
-                for i in all_reminders:
-                    if i.reminded==False:
-                        event_date = i.date
-                        nowdate = datetime.datetime.today()
-                        e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
-                        if (e[0]<450) and (e[0]>330) :
-                            timeleft= (e[0]-330)/60.0
-                            hr=timeleft-(timeleft%1)
-                            mi=round((timeleft%1)*60,0)
-                            senderid = i.sender_id
-                            reminder_message = "Sir, you have a " + i.name + " after "+str(hr)+" hours and "+str(mi)+" minutes!"
-                            send_message(senderid, reminder_message)
-                            i.reminded=True
-                            db.session.add(i)
-                            db.session.commit()
-                        elif e[0]<330:
-                            i.reminded=True
-                            send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
-                            db.session.add(i)
-                            db.session.commit()
-
 
     return "ok", 200
 
