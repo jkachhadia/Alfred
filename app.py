@@ -27,9 +27,10 @@ def main(query,sessionid):
     send_message(sessionid, response['result']['fulfillment']['speech'])
 
 app=Flask(__name__)
-app.config.from_pyfile('app.cfg')
+CONNECTION = 'mongodb://sumedh:sumedh@ds145158.mlab.com:45158/alfred'
 client = MongoClient(CONNECTION)
 db = client.alfred
+app.config.from_pyfile('app.cfg')
 
 PAGE_ACCESS_TOKEN = "EAAYUNKfFZCuABAOLNNzAQxrmgbAqrD1m9DRkB0WrCZB8zOEPyI4ilHyWSvvifXArhEPNkxKT7LiNc4u4s7VL1tltMr9JL6IisLM0VXQrs6OYLeSK28lk5pXdEhod4qiioC6TeJN74NqbmKqQwIBlpbNUmCXvTcPnJSFFjMAwZDZD"
 VERIFY_TOKEN = "alfred-svnit"
