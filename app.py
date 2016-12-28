@@ -67,8 +67,8 @@ def webook():
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
-                    main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
-                    
+                    send_message(messaging_event["sender"]["id"], "What is your roll no?")
+
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
                 if messaging_event.get("optin"):  # optin confirmation
