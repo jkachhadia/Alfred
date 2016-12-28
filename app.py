@@ -67,10 +67,7 @@ def webook():
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
-                    if messaging_event["message"]["text"] == "note" :
-                        send_message(messaging_event["sender"]["id"], 'What is your adm no?')
-                    else:
-                        main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+                    main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
                     
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
