@@ -116,9 +116,9 @@ def send_message(recipient_id, message_text):
 
 @app.route('/<message>', methods=['GET','POST'])
 def mass(message):
-    subs=Subscriber.query.all()
+    subs= db.user
     for user in subs:
-        send_message(user.sub_id,message)
+        send_message(user.user_id,message)
     return "ok", 200
 
 
