@@ -68,7 +68,16 @@ def webook():
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
-                    send_message(messaging_event["sender"]["id"], "What is your roll no?")
+                    roll_no = 0
+                    user = db.user.find_one({ 'sender_id' : messaging_event["sender"]["id"] })
+                    if user is None :
+                        send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
+                        roll_no = 1
+                    elif roll_no = 1:
+                        user = db.user.insert({ "user_id" : messaging_event["sender"]["id"],
+                                                "adm_no" : str(messaging_event["message"]["text"])})
+                    else:
+                        send_message(messaging_event["sender"]["id"], "Welcome again.")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
