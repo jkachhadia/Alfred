@@ -114,7 +114,7 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
-@app.route('/<char:branch>/<char:year>/<message>', methods=['GET','POST'])
+@app.route('/<char:branch>/<char:year>/<char:message>', methods=['GET','POST'])
 def mass(branch,year,message):
     subs= db.user
     for u in subs:
