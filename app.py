@@ -114,7 +114,7 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
-@app.route('/<char:message>', methods=['GET','POST'])
+@app.route('/<message>', methods=['GET','POST'])
 def mass(message):
     subs= db.user
     print subs
