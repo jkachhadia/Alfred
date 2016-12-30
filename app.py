@@ -76,7 +76,7 @@ def webook():
                         print 'User not found'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                         roll_no = 1
-                    elif roll_no == 1 and messaging_event['sender']['id'] == user_id:
+                    if roll_no == 1 and messaging_event['sender']['id'] == user_id:
                         user = db.user.insert_one({ "user_id" : messaging_event["sender"]["id"],
                                                 "adm_no" : str(messaging_event["message"]["text"])})
                         roll_no = 0
