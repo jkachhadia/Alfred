@@ -118,8 +118,8 @@ def send_message(recipient_id, message_text):
 def mass(message):
     users = db.user
     print users
-    # for u in users:
-    #     print u
+    for u in users.find():
+        print u
         # if str(year) in u["adm_no"]:
         #     if str(branch) in u["adm_no"]:
         #       send_message(u.user_id,message)
