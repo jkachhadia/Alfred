@@ -64,24 +64,24 @@ def webook():
 
     if data["object"] == "page":
         for entry in data["entry"]:
-            print entry
+            # print entry
             for messaging_event in entry["messaging"]:
                 if messaging_event.get("message"):  # someone sent us a message
-                    print 'Got message'
-                    roll_no=0
-                    user = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
-                    user_id = messaging_event['sender']['id']
-                    if user is None and roll_no != 0:
-                        print 'User not found'
-                        send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
-                        roll_no = 1
-                    if roll_no == 1 and messaging_event['sender']['id'] == user_id:
-                        user = db.user.insert_one({ "user_id" : messaging_event["sender"]["id"],
-                                                "adm_no" : str(messaging_event["message"]["text"]), "registered" : true})
-                        roll_no = 0
-                        send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
-                    else:
-                        main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+                    # print 'Got message'
+                    # roll_no=0
+                    # user = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
+                    # user_id = messaging_event['sender']['id']
+                    # if user is None and roll_no != 0:
+                    #     print 'User not found'
+                    #     send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
+                    #     roll_no = 1
+                    # if roll_no == 1 and messaging_event['sender']['id'] == user_id:
+                    #     user = db.user.insert_one({ "user_id" : messaging_event["sender"]["id"],
+                    #                             "adm_no" : str(messaging_event["message"]["text"]), "registered" : true})
+                    #     roll_no = 0
+                    #     send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
+                    # else:
+                    main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
                 if messaging_event.get("optin"):  # optin confirmation
