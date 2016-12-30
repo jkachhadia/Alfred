@@ -62,9 +62,8 @@ def webook():
     data = request.get_json()
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
 
-    roll_no = 0
     if data["object"] == "page":
-
+        roll_no = 0
         for entry in data["entry"]:
             for messaging_event in entry["messaging"]:
 
@@ -78,7 +77,7 @@ def webook():
                         roll_no = 1
                     if roll_no == 1 and messaging_event['sender']['id'] == user_id:
                         user = db.user.insert_one({ "user_id" : messaging_event["sender"]["id"],
-                                                "adm_no" : str(messaging_event["message"]["text"])})
+                                                "adm_no" : str(messaging_event["message"]["text"]), "registered" : true})
                         roll_no = 0
                         send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     else:
