@@ -62,6 +62,7 @@ def webook():
     data = request.get_json()
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
 
+    roll_no = 0
     if data["object"] == "page":
 
         for entry in data["entry"]:
@@ -69,7 +70,6 @@ def webook():
 
                 if messaging_event.get("message"):  # someone sent us a message
                     print 'Got message'
-                    roll_no = 0
                     user = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
                     user_id = messaging_event['sender']['id']
                     if user is None and roll_no == 0 :
