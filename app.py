@@ -117,9 +117,9 @@ def send_message(recipient_id, message_text):
 @app.route('/<message>', methods = ['GET', 'POST'])
 def mass(message):
     users = db.user
-    print users
-    # for u in users:
-    #     print u["user_id"]
+    # print users
+    for u in users:
+        print u
     #     print '\n'
     #     print u["adm_no"]
         # print u["adm_no"]
