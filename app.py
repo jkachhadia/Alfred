@@ -114,15 +114,15 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
-@app.route('/<message>', methods = ['GET', 'POST'])
-def mass(message):
+@app.route('/<char:branch>/<char:year>/<message>', methods = ['GET', 'POST'])
+def mass(branch, year, message):
     users = db.user
     print users
     for u in users.find():
         print u
-        # if str(year) in u["adm_no"]:
-        #     if str(branch) in u["adm_no"]:
-        #       send_message(u.user_id,message)
+        if str(year) in u["adm_no"]:
+            if str(branch) in u["adm_no"]:
+              send_message(u.user_id,message)
     return "ok", 200
 
 def log(message):  # simple wrapper for logging to stdout on heroku
