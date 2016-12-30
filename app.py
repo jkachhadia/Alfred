@@ -70,12 +70,13 @@ def webook():
                 if messaging_event.get("message"):  # someone sent us a message
                     print 'Got message'
                     roll_no = 0
-                    user = db.user.find_one({ 'sender_id' : messaging_event["sender"]["id"] })
+                    user = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
+                    user_id = messaging_event['sender']['id']
                     if user is None and roll_no == 0 :
                         print 'User not found'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                         roll_no = 1
-                    elif roll_no == 1:
+                    elif roll_no == 1 and messaging_event['sender']['id'] == user_id:
                         user = db.user.insert_one({ "user_id" : messaging_event["sender"]["id"],
                                                 "adm_no" : str(messaging_event["message"]["text"])})
                         roll_no = 0
