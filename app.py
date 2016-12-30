@@ -67,16 +67,17 @@ def webook():
             # print entry
             for messaging_event in entry["messaging"]:
                 if messaging_event.get("message"):  # someone sent us a message
-                    # print 'Got message'
+                    print 'Got message'
                     # roll_no=0
                     user = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
                     # user_id = messaging_event['sender']['id']
                     if user is None :
                         print 'User not found'
-                        db.user.insert_one({ "user_id" : messaging_event["sender"]["id"], "adm_no" : NULL })
+                        db.user.insert_one({ "user_id" : messaging_event["sender"]["id"], "adm_no" : 0 })
+                        print 'inserted'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                     #     roll_no = 1
-                    elif user and user["adm_no"] == NULL:
+                    elif user and user["adm_no"] == 0:
                         user.update_one({ "adm_no" : messaging_event["message"]["text"] })
                     #     roll_no = 0
                     #     send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
