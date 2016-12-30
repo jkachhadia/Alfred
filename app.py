@@ -64,25 +64,21 @@ def webook():
 
     if data["object"] == "page":
         for entry in data["entry"]:
-            # print entry
             for messaging_event in entry["messaging"]:
                 if messaging_event.get("message"):  # someone sent us a message
                     print 'Got message'
-                    # roll_no=0
                     currentuser = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
-                    # user_id = messaging_event['sender']['id']
                     if currentuser is None :
                         print 'User not found'
                         db.user.insert_one({ "user_id" : messaging_event["sender"]["id"], "adm_no" : 0 })
                         print 'inserted'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
-                    #     roll_no = 1
                     elif currentuser and currentuser["adm_no"] == 0 and messaging_event["sender"]["id"] != 1851054981802215:
-                        db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : messaging_event["message"]["text"], "user_id" : messaging_event["sender"]["id"]}, upsert = False)
-                    #     roll_no = 0
+                        db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(messaging_event["message"]["text"]), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
                         send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     else:
                         main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
                 if messaging_event.get("optin"):  # optin confirmation
@@ -118,14 +114,14 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
-# @app.route('/<message>', methods=['GET','POST'])
-# def mass(message):
-#     subs= db.user
-#     for user in subs:
-#         send_message(user.user_id,message)
-#     return "ok", 200
-
-
+@app.route('/<char:branch>/<char:year>/<message>', methods=['GET','POST'])
+def mass(branch,year,message):
+    subs= db.user
+    for u in subs:
+        if year in u["adm_no"]:
+            if branch in u["adm_no"]
+                send_message(user.user_id,message)
+    return "ok", 200
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
