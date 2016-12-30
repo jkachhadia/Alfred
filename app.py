@@ -65,6 +65,7 @@ def webook():
     if data["object"] == "page":
         roll_no = 0
         for entry in data["entry"]:
+            roll_no = 0
             for messaging_event in entry["messaging"]:
 
                 if messaging_event.get("message"):  # someone sent us a message
