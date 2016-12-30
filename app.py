@@ -78,9 +78,9 @@ def webook():
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                     #     roll_no = 1
                     elif user and user["adm_no"] == 0:
-                        user.update_one({ "adm_no" : messaging_event["message"]["text"] })
+                        db.user.update_one({"_id" : user["_id"] ,"adm_no" : messaging_event["message"]["text"] }, upsert = False)
                     #     roll_no = 0
-                    #     send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
+                        send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     # else:
                     # main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
                 if messaging_event.get("delivery"):  # delivery confirmation
