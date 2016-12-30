@@ -121,7 +121,7 @@ def mass(branch,year,message):
         # print u["adm_no"]
         if year in u["adm_no"]:
             if branch in u["adm_no"]:
-                send_message(user.user_id,message)
+                send_message(u.user_id,message)
     return "ok", 200
 
 def log(message):  # simple wrapper for logging to stdout on heroku
