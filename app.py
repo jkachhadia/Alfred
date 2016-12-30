@@ -119,8 +119,8 @@ def mass(branch,year,message):
     subs= db.user
     for u in subs:
         # print u["adm_no"]
-        if year in u["adm_no"]:
-            if branch in u["adm_no"]:
+        if str(year) in u["adm_no"]:
+            if str(branch) in u["adm_no"]:
                 send_message(u.user_id,message)
     return "ok", 200
 
