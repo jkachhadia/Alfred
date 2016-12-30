@@ -63,16 +63,15 @@ def webook():
     log(data)  # you may not want to log every incoming message in production, but it's good for testing
 
     if data["object"] == "page":
-        roll_no = 0
         for entry in data["entry"]:
-            roll_no = 0
+            print entry
             for messaging_event in entry["messaging"]:
-
                 if messaging_event.get("message"):  # someone sent us a message
                     print 'Got message'
+                    roll_no=0
                     user = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
                     user_id = messaging_event['sender']['id']
-                    if user is None and roll_no == 0 :
+                    if user is None and roll_no != 0:
                         print 'User not found'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                         roll_no = 1
