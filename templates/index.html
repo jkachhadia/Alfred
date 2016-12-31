@@ -3,42 +3,20 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<style type="text/css">
-		#main {
-			display : flex;
-			width : 500px;
-			height : auto;
-			justify-content: center;
-			vertical-align: middle;
-		}
-	</style>
 <script type="text/javascript" src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-		<input type="text" name="notification" placeholder = "Your notification here!">
-	<div class = "row" id = "main">
-		<div class = "checkbox">
-			<ul>
-				<li><input type="checkbox" name="comps" value = "Computer">Comps</li>	
-				<li><input type="checkbox" name="mech" value = "Mechanical">Mech</li>	
-				<li><input type="checkbox" name="electronics" value = "Electronics">Electronics</li>	
-				<li><input type="checkbox" name="chemical" value = "Chemical">Chemical</li>	
-			</ul>
-		</div>
-	</div>
-		<button type = "submit" class = "btn btn-primary">Send</button>
-</body>
-</html>
-
-<form action = "/sent" method = "POST">
+	<form action = "{{url_for('mass')}}" method = "POST">
 	<input type="text" name="notification" placeholder = "Your notification here.">
-		<div class = "checkbox">
-			<ul>
-				<li><input type="checkbox" name="options" id = "co">Comps</li>	
-				<li><input type="checkbox" name="options" id = "me">Mech</li>	
-				<li><input type="checkbox" name="options" id = "ec">Electronics</li>	
-				<li><input type="checkbox" name="options" id = "ch">Chemical</li>	
-			</ul>
+		<div class = "dropdown">
+			<select name = "dropdown">Branch
+				<option>CO</option>
+				<option>EC</option>
+				<option>CH</option>
+				<option>ME</option>
+			</select>
 		</div>
 		<button type = "submit" class = "btn btn-primary">Send</button>
 </form>
+</body>
+</html>

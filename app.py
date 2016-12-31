@@ -116,16 +116,14 @@ def send_message(recipient_id, message_text):
 
 @app.route('/sent', methods = ['GET', 'POST'])
 def mass():
+    print 'received'
     users = db.user
     # print users
-    branch = request.form['options']
-    # year = 
-    for b in branch:
-        if b:
-            for u in users.find():
-                # print u
-                if str(b['id']) in u["adm_no"]:
-                      send_message(int(u["user_id"]), message)
+    dropdown = request.form.get('dropdown')
+    for u in users.find():
+        print u
+        if str(dropdown) in u["adm_no"]:
+              send_message(int(u["user_id"]), message)
     return "ok", 200
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
