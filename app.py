@@ -121,11 +121,11 @@ def mass():
     notification = str(request.form.get('notification'))
     branchDropdown = str(request.form.get('dropdown-branch'))
     yearDropdown = str(request.form.get('dropdown-year'))
-    print yearDropdown
     for u in users.find():
-        print u
+        # print u
         if str.lower(branchDropdown) in u["adm_no"]:
-              send_message(int(u["user_id"]), notification)
+            if yearDropdown in u["adm_no"]:
+                send_message(int(u["user_id"]), notification)
     return "Notification sent successfully", 200
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
