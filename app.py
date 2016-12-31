@@ -119,7 +119,7 @@ def mass():
     print 'received'
     users = db.user
     # print users
-    dropdown = request.form.get('dropdown')
+    dropdown = str(request.form.get('dropdown'))
     for u in users.find():
         print u
         if str.lower(dropdown) in u["adm_no"]:
