@@ -123,7 +123,7 @@ def mass():
     for u in users.find():
         print u
         if str.lower(dropdown) in u["adm_no"]:
-              send_message(int(u["user_id"]), message)
+              send_message(int(u["user_id"]), dropdown)
     return "ok", 200
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
