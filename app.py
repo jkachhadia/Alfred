@@ -122,7 +122,7 @@ def mass():
     dropdown = request.form.get('dropdown')
     for u in users.find():
         print u
-        if str(dropdown) in u["adm_no"]:
+        if str.lower(dropdown) in u["adm_no"]:
               send_message(int(u["user_id"]), message)
     return "ok", 200
 
