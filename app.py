@@ -118,7 +118,7 @@ def send_message(recipient_id, message_text):
 def mass():
     print 'received'
     users = db.user
-    # print users
+    notification = str(request.form.get('notification'))
     dropdown = str(request.form.get('dropdown'))
     for u in users.find():
         print u
