@@ -126,7 +126,7 @@ def mass():
         if str.lower(branchDropdown) in u["adm_no"]:
             if yearDropdown in u["adm_no"]:
                 send_message(int(u["user_id"]), notification)
-    return "Notification sent successfully", 200
+                return "Notification sent successfully", 200
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
 def send():
