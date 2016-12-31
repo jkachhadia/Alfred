@@ -4,7 +4,7 @@ import os
 import sys
 import requests
 import json
-from flask import Flask,request
+from flask import Flask,request, render_template
 from pymongo import MongoClient
 import datetime
 from datetime import date
@@ -114,16 +114,23 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
-@app.route('/<branch>/<year>/<message>', methods = ['GET', 'POST'])
-def mass(branch, year, message):
+@app.route('/sent', methods = ['GET', 'POST'])
+def mass():
     users = db.user
-    print users
-    for u in users.find():
-        print u
-        if str(year) in u["adm_no"]:
-            if str(branch) in u["adm_no"]:
-              send_message(int(u["user_id"]), message)
+    # print users
+    branch = request.form['options']
+    # year = 
+    for b in branch:
+        if b:
+            for u in users.find():
+                # print u
+                if str(b['id']) in u["adm_no"]:
+                      send_message(int(u["user_id"]), message)
     return "ok", 200
+
+@app.route('/sendNotification', methods = ['GET', 'POST'])
+def send():
+    return render_template('index.html')
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
