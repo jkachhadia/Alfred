@@ -3,12 +3,21 @@
 <head>
 	<title></title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<style type="text/css">
+		.wrapper {
+			display : inline-block;
+		}
+		#submitbtn {
+			margin : 2%;
+		}
+	</style>
 <script type="text/javascript" src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<form action = "{{url_for('mass')}}" method = "POST">
+	<form action = "{{url_for('mass')}}" method = "POST" class = "container">
+	<div class = "jumbotron">
 	<input type="text" name="notification" placeholder = "Your notification here.">
-		<div class = "dropdown-branch">
+		<div class = "wrapper">
 			<select name = "dropdown-branch">Branch
 				<option value = "all">All</option>
 				<option value = "co">CO</option>
@@ -23,8 +32,9 @@
 				<option name = "years" value = "14">3rd</option>
 				<option name = "years" value = "13">4th</option>
 			</select>
-		</div>
-		<button type = "submit" class = "btn btn-primary">Send</button>
-</form>
+		</div><br>
+		<button type = "submit" class = "btn btn-primary" id = "submitbtn">Send</button>
+	</div>
+	</form>
 </body>
 </html>
