@@ -133,13 +133,17 @@ def mass():
         for u in users.find():
             if branchDropdown in u["adm_no"]:
                 send_message(int(u["user_id"]), notification)
+                return "Notification sent successfully", 200
+
     if branchDropdown == 'all' and yearDropdown != 'all':
         for u in user.find():
             if yearDropdown in u["adm_no"]:
                 send_message(int(u["user_id"]), notification)
+                return 'Notification sent successfully'
     if branchDropdown == 'all' and yearDropdown == 'all':
         for u in users.find():
             send_message(int(u["user_id"]), notification)
+            return 'Notification sent successfully'
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
 def send():
