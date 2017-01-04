@@ -120,13 +120,26 @@ def mass():
     users = db.user
     notification = str(request.form.get('notification'))
     branchDropdown = str(request.form.get('dropdown-branch'))
+    print branchDropdown
     yearDropdown = str(request.form.get('dropdown-year'))
-    for u in users.find():
-        # print u
-        if str.lower(branchDropdown) in u["adm_no"]:
+    if branchDropdown != 'all' and yearDropdown != 'all':
+        for u in users.find():
+            # print u
+            if str.lower(branchDropdown) in u["adm_no"]:
+                if yearDropdown in u["adm_no"]:
+                    send_message(int(u["user_id"]), notification)
+                    return "Notification sent successfully", 200
+    if branchDropdown != 'all' and yearDropdown == 'all':
+        for u in users.find():
+            if branchDropdown in u["adm_no"]:
+                send_message(int(u["user_id"]), notification)
+    if branchDropdown == 'all' and yearDropdown != 'all':
+        for u in user.find():
             if yearDropdown in u["adm_no"]:
                 send_message(int(u["user_id"]), notification)
-                return "Notification sent successfully", 200
+    if branchDropdown == 'all' and yearDropdown == 'all':
+        for u in users.find():
+            send_message(int(u["user_id"]), notification)
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
 def send():
