@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title></title>
+	<title>Notification</title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
 	<style type="text/css">
-		.wrapper {
-			display : inline-block;
+		@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+		@import url('https://fonts.googleapis.com/css?family=Quicksand');
+		#heading {
+			font-family : 'Inconsolata', monospace;
 		}
-		#submitbtn {
-			margin : 2%;
+		#notification {
+			width : 500px;
+			height : 100px;
 		}
 	</style>
-<script type="text/javascript" src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<form action = "{{url_for('mass')}}" method = "POST" class = "container">
 	<div class = "jumbotron">
-	<input type="text" name="notification" placeholder = "Your notification here.">
+	<h1 id = "heading">SVNIT notification system.</h1>
+	<input type="text" name="notification" placeholder = "Your notification here." id = "notification"><br><br>
 		<div class = "wrapper">
-			<select name = "dropdown-branch">Branch
+			<select name = "dropdown-branch">
 				<option value = "all">All</option>
-				<option value = "co">CO</option>
-				<option value = "ec">EC</option>
-				<option value = "ee">EE</option>
-				<option value = "ch">CH</option>
-				<option value = "ce">CE</option>
-				<option value = "me">ME</option>
+				<option value = "co">Computer</option>
+				<option value = "ec">Electronics</option>
+				<option value = "ee">Electrical</option>
+				<option value = "ch">Chemical</option>
+				<option value = "ce">Civil</option>
+				<option value = "me">Mechanical</option>
 				<option value = "ma">Applied maths and humanities</option>
 				<option value = "ph">Applied physics</option>
 				<option value = "cy">Applied chemistry</option>
 				<option value = "p">Mtech</option>
 			</select>
-			<select name = "dropdown-year">Year
+			<select name = "dropdown-year">
 				<option value = "all">All</option>
 				<option name = "years" value = "16">1st</option>
 				<option name = "years" value = "15">2nd</option>
