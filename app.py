@@ -75,8 +75,8 @@ def webook():
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                     elif currentuser and currentuser["adm_no"] == 0 and messaging_event["sender"]["id"] != 1851054981802215:
                         print messaging_event["message"]["text"]
-                        print str.lower(messaging_event["message"]["text"])
-                        db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(messaging_event["message"]["text"]), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
+                        print str.lower(str(messaging_event["message"]["text"]))
+                        db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(str(messaging_event["message"]["text"])), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
                         send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     else:
                         main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
