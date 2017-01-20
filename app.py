@@ -70,10 +70,10 @@ def webook():
                     currentuser = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
                     if currentuser is None :
                         print 'User not found'
-                        db.user.insert_one({ "user_id" : messaging_event["sender"]["id"], "adm_no" : 0 })
+                        db.user.insert_one({ "user_id" : messaging_event["sender"]["id"], "adm_no" : "0" })
                         print 'inserted'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
-                    elif currentuser and currentuser["adm_no"] == 0 and messaging_event["sender"]["id"] != 1851054981802215:
+                    elif currentuser and currentuser["adm_no"] == "0" and messaging_event["sender"]["id"] != 1851054981802215:
                         db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(messaging_event["message"]["text"]), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
                         send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     else:
