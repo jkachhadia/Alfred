@@ -79,7 +79,7 @@ def webook():
                     else:
                         print messaging_event["message"]["text"]
                         print messaging_event["sender"]["id"]
-                        # main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+                        main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
                         # send_message(messaging_event["sender"]["id"], "this is working fine.")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
