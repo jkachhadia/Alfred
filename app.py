@@ -80,7 +80,6 @@ def webook():
                         print messaging_event["message"]["text"]
                         print messaging_event["sender"]["id"]
                         main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
-                        # send_message(messaging_event["sender"]["id"], "this is working fine.")
 
                 if messaging_event.get("delivery"):  # delivery confirmation
                     pass
@@ -90,9 +89,6 @@ def webook():
                     pass
 
     return "ok", 200
-
-
-
 
 def send_message(recipient_id, message_text):
 
@@ -127,7 +123,6 @@ def mass():
     yearDropdown = str(request.form.get('dropdown-year'))
     if branchDropdown != 'all' and yearDropdown != 'all':
         for u in users.find():
-            # print u
             if str.lower(branchDropdown) in u["adm_no"]:
                 if yearDropdown in u["adm_no"]:
                     send_message(int(u["user_id"]), notification)
