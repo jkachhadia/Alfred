@@ -32,7 +32,7 @@ client = MongoClient(CONNECTION)
 db = client.alfred
 app.config.from_pyfile('app.cfg')
 
-PAGE_ACCESS_TOKEN = "EAAYUNKfFZCuABAJbhjWmeFQeIPEiJ7KZCw8PuZCZAEreicmpF4HEJHwB6YepxR6yKEWljnfsajYG8h8A7Ex6lZAZCxlrRvZAicR25UyZCFzsQpLVd3W4gVwqsTPAUr2G1UO8ZBNXR4TSrCHkRgNKqdWuWTWkeeZA4jzDKPGdjS66H0qgZDZD"
+PAGE_ACCESS_TOKEN = "EAAYUNKfFZCuABAGVZBWod8KemrBFFcGZBgtNVhM4i90jaU1SlEh6iemDlJddfq8vhXLDZAqMkQytKZBtgnlE1DJ1R3dBQsAphDT3TdV8lAeHadYzwX056X2kseO8vzxH1h3YMo6AEfgak6r9MOcdbhlidAupLUEdgKtg3NGBHAgZDZD"
 VERIFY_TOKEN = "alfred-svnit"
 
 def short_url(url):
@@ -74,11 +74,10 @@ def webook():
                         print 'inserted'
                         send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
                     elif currentuser and currentuser["adm_no"] == 0 and messaging_event["sender"]["id"] != 1851054981802215:
-                        print messaging_event["message"]["text"]
-                        print str.lower(str(messaging_event["message"]["text"]))
                         db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(str(messaging_event["message"]["text"])), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
                         send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     else:
+                        print messaging_event["message"]["text"]
                         main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
 
                 if messaging_event.get("delivery"):  # delivery confirmation
