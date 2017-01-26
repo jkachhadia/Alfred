@@ -4,11 +4,15 @@ import os
 import sys
 import requests
 import json
-from flask import Flask,request, render_template
+from flask import Flask,request, render_template, url_for
 from pymongo import MongoClient
 import datetime
 from datetime import date
 import apiai
+from werkzeug.utils import secure_filename
+from util import *
+from constants import *
+
 def main(query,sessionid):
     ai = apiai.ApiAI('13537e5537c543b78b713852b76ff0f3 ')
 
@@ -31,9 +35,6 @@ CONNECTION = 'mongodb://sumedh:sumedh@ds145158.mlab.com:45158/alfred'
 client = MongoClient(CONNECTION)
 db = client.alfred
 app.config.from_pyfile('app.cfg')
-
-PAGE_ACCESS_TOKEN = "EAAYUNKfFZCuABAGVZBWod8KemrBFFcGZBgtNVhM4i90jaU1SlEh6iemDlJddfq8vhXLDZAqMkQytKZBtgnlE1DJ1R3dBQsAphDT3TdV8lAeHadYzwX056X2kseO8vzxH1h3YMo6AEfgak6r9MOcdbhlidAupLUEdgKtg3NGBHAgZDZD"
-VERIFY_TOKEN = "alfred-svnit"
 
 def short_url(url):
     post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyB0N1UrT-OxThltr9Lr1bb1IeCuYma-rro'
@@ -90,42 +91,27 @@ def webook():
 
     return "ok", 200
 
-def send_message(recipient_id, message_text):
-
-    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
-
-    params = {
-        "access_token": PAGE_ACCESS_TOKEN
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": message_text
-        }
-    })
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
-    if r.status_code != 200:
-        log(r.status_code)
-        log(r.text)
-
 @app.route('/sent', methods = ['GET', 'POST'])
 def mass():
     print 'received'
     users = db.user
     notification = str(request.form.get('notification'))
     branchDropdown = str(request.form.get('dropdown-branch'))
-    print branchDropdown
+    # print branchDropdown
+    # image = request.form.get('upload')
+    # image = request.form.get('image_upload')
+    # print image
+    # filename = secure_filename(image.filename)
+    # print filename
+    # filepath = os.path.join(image)
+    # print filepath
     yearDropdown = str(request.form.get('dropdown-year'))
     if branchDropdown != 'all' and yearDropdown != 'all':
         for u in users.find():
             if str.lower(branchDropdown) in u["adm_no"]:
                 if yearDropdown in u["adm_no"]:
                     send_message(int(u["user_id"]), notification)
+                    # send_image(int(u["user_id"]), filepath)
                     return "Notification sent successfully", 200
     if branchDropdown != 'all' and yearDropdown == 'all':
         for u in users.find():

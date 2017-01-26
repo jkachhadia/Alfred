@@ -3,7 +3,7 @@
 <head>
 	<title>Notification</title>
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename = 'css/style.css')}}">
 	<style type="text/css">
 		@import url('https://fonts.googleapis.com/css?family=Inconsolata');
 		@import url('https://fonts.googleapis.com/css?family=Quicksand');
@@ -18,7 +18,7 @@
 	<script type="text/javascript" src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<form action = "{{url_for('mass')}}" method = "POST" class = "container">
+	<form action = "{{url_for('mass')}}" method = "POST" class = "container" id = "notificationform">
 	<div class = "jumbotron">
 	<h1 id = "heading">SVNIT notification system.</h1>
 	<input type="text" name="notification" placeholder = "Your notification here." id = "notification"><br><br>
@@ -45,6 +45,7 @@
 				<option name = "years" value = "12">5th</option>
 			</select>
 		</div><br>
+		<input type="file" name="upload">
 		<button type = "submit" class = "btn btn-primary" id = "submitbtn">Send</button>
 	</div>
 	</form>
