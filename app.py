@@ -34,6 +34,7 @@ db = client.alfred
 app.config.from_pyfile('app.cfg')
 
 PAGE_ACCESS_TOKEN = 'EAAYUNKfFZCuABALBdzGcfEU54RcZBIpGwCNjx3bSPtdVjJ8rGpXk1SuZAFAErA7LVjqXvXziNRZCHYdFY2IRZATTVZCWcOYdXCbcgnPYQIhuOBg3XCWgpXHFsYBqwAQPEGKwjZCEHqOYNvbZCAZBzgJXJQeHdK1mL2RhlQoEJMsHs5wZDZD'
+VERIFY_TOKEN = 'alfred-svnit'
 
 def short_url(url):
     post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyB0N1UrT-OxThltr9Lr1bb1IeCuYma-rro'
