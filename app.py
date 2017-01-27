@@ -77,6 +77,7 @@ def webook():
                         db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(str(messaging_event["message"]["text"])), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
                         send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
                     else:
+                        print "api.ai here."
                         print messaging_event["message"]["text"]
                         print messaging_event["sender"]["id"]
                         main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
