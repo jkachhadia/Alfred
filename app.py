@@ -33,6 +33,8 @@ client = MongoClient(CONNECTION)
 db = client.alfred
 app.config.from_pyfile('app.cfg')
 
+PAGE_ACCESS_TOKEN = 'EAAYUNKfFZCuABALBdzGcfEU54RcZBIpGwCNjx3bSPtdVjJ8rGpXk1SuZAFAErA7LVjqXvXziNRZCHYdFY2IRZATTVZCWcOYdXCbcgnPYQIhuOBg3XCWgpXHFsYBqwAQPEGKwjZCEHqOYNvbZCAZBzgJXJQeHdK1mL2RhlQoEJMsHs5wZDZD'
+
 def short_url(url):
     post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyB0N1UrT-OxThltr9Lr1bb1IeCuYma-rro'
     params = json.dumps({'longUrl': url})
@@ -132,7 +134,7 @@ def send_message(recipient_id, message_text):
     log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
 
     params = {
-        "access_token": 'EAAYUNKfFZCuABALBdzGcfEU54RcZBIpGwCNjx3bSPtdVjJ8rGpXk1SuZAFAErA7LVjqXvXziNRZCHYdFY2IRZATTVZCWcOYdXCbcgnPYQIhuOBg3XCWgpXHFsYBqwAQPEGKwjZCEHqOYNvbZCAZBzgJXJQeHdK1mL2RhlQoEJMsHs5wZDZD'
+        "access_token": PAGE_ACCESS_TOKEN
     }
     headers = {
         "Content-Type": "application/json"
