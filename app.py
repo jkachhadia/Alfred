@@ -53,7 +53,7 @@ def verify():
     return "Hello world", 200
 
 @app.route('/', methods=['POST'])
-def webook():
+def webhook():
 
     # endpoint for processing incoming messaging events
 
