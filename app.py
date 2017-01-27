@@ -55,6 +55,29 @@ def verify():
 
     return "Hello world", 200
 
+def send_message(recipient_id, message_text):
+
+    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
+
+    params = {
+        "access_token": PAGE_ACCESS_TOKEN
+    }
+    headers = {
+        "Content-Type": "application/json"
+    }
+    data = json.dumps({
+        "recipient": {
+            "id": recipient_id
+        },
+        "message": {
+            "text": message_text
+        }
+    })
+    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
+    if r.status_code != 200:
+        log(r.status_code)
+        log(r.text)
+
 @app.route('/', methods=['POST'])
 def webhook():
 
@@ -98,21 +121,12 @@ def mass():
     users = db.user
     notification = str(request.form.get('notification'))
     branchDropdown = str(request.form.get('dropdown-branch'))
-    # print branchDropdown
-    # image = request.form.get('upload')
-    # image = request.form.get('image_upload')
-    # print image
-    # filename = secure_filename(image.filename)
-    # print filename
-    # filepath = os.path.join(image)
-    # print filepath
     yearDropdown = str(request.form.get('dropdown-year'))
     if branchDropdown != 'all' and yearDropdown != 'all':
         for u in users.find():
             if str.lower(branchDropdown) in u["adm_no"]:
                 if yearDropdown in u["adm_no"]:
                     send_message(int(u["user_id"]), notification)
-                    # send_image(int(u["user_id"]), filepath)
                     return "Notification sent successfully", 200
     if branchDropdown != 'all' and yearDropdown == 'all':
         for u in users.find():
@@ -129,29 +143,6 @@ def mass():
         for u in users.find():
             send_message(int(u["user_id"]), notification)
             return 'Notification sent successfully', 200
-
-def send_message(recipient_id, message_text):
-
-    log("sending message to {recipient}: {text}".format(recipient=recipient_id, text=message_text))
-
-    params = {
-        "access_token": PAGE_ACCESS_TOKEN
-    }
-    headers = {
-        "Content-Type": "application/json"
-    }
-    data = json.dumps({
-        "recipient": {
-            "id": recipient_id
-        },
-        "message": {
-            "text": message_text
-        }
-    })
-    r = requests.post("https://graph.facebook.com/v2.6/me/messages", params=params, headers=headers, data=data)
-    if r.status_code != 200:
-        log(r.status_code)
-        log(r.text)
 
 @app.route('/sendNotification', methods = ['GET', 'POST'])
 def send():
