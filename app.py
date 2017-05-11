@@ -4,12 +4,11 @@ import os
 import sys
 import requests
 import json
-from flask import Flask,request, render_template, url_for
-from pymongo import MongoClient
+from flask import Flask,request
+from flask_sqlalchemy import SQLAlchemy
 import datetime
 from datetime import date
 import apiai
-
 def main(query,sessionid):
     ai = apiai.ApiAI('13537e5537c543b78b713852b76ff0f3 ')
 
@@ -27,14 +26,17 @@ def main(query,sessionid):
 
     send_message(sessionid, response['result']['fulfillment']['speech'])
 
-app=Flask(__name__)
-CONNECTION = 'mongodb://sumedh:sumedh@ds145158.mlab.com:45158/alfred'
-client = MongoClient(CONNECTION)
-db = client.alfred
-app.config.from_pyfile('app.cfg')
 
-PAGE_ACCESS_TOKEN = 'EAAYUNKfFZCuABALBdzGcfEU54RcZBIpGwCNjx3bSPtdVjJ8rGpXk1SuZAFAErA7LVjqXvXziNRZCHYdFY2IRZATTVZCWcOYdXCbcgnPYQIhuOBg3XCWgpXHFsYBqwAQPEGKwjZCEHqOYNvbZCAZBzgJXJQeHdK1mL2RhlQoEJMsHs5wZDZD'
-VERIFY_TOKEN = 'alfred-svnit'
+
+
+
+
+app=Flask(__name__)
+app.config.from_pyfile('app.cfg')
+db = SQLAlchemy(app)
+
+PAGE_ACCESS_TOKEN = "EAAEMH5yZAxtABAIi5RjBMuW5ttS3kgZCOIM1LM92nZBp6ZAMZCg1NPleNMmKsRfS2Jbb4FrYeXca1knaalZBLJf7UCGj3XfBCZBn5YW1w0ZBkY4zhOZASW5Uf75IMJ0P7gIkPBlfZAnv4sYLi75V4EvZC6maLgvriPfaSB1sgHYXAo1gwZDZD"
+VERIFY_TOKEN = "alfred"
 
 def short_url(url):
     post_url = 'https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyB0N1UrT-OxThltr9Lr1bb1IeCuYma-rro'
@@ -42,6 +44,19 @@ def short_url(url):
     response = requests.post(post_url,params,headers={'Content-Type': 'application/json'})
     response1=json.loads(response.text)
     return response1['id']
+
+class Event(db.Model):
+    __tablename__='events'
+    id=db.Column(db.Integer,primary_key=True)
+    sender_id=db.Column(db.String(100))
+    name=db.Column(db.String(100),default='event')
+    date=db.Column(db.DateTime)
+    reminded=db.Column(db.Boolean,default=False)
+
+class Subscriber(db.Model):
+    __tablename_='subscribers'
+    id=db.Column(db.Integer,primary_key=True)
+    sub_id=db.Column(db.String(100))
 
 @app.route('/', methods=['GET'])
 def verify():
@@ -54,6 +69,198 @@ def verify():
         return request.args["hub.challenge"], 200
 
     return "Hello world", 200
+
+@app.route('/', methods=['POST'])
+def webook():
+
+    # endpoint for processing incoming messaging events
+
+    data = request.get_json()
+    log(data)  # you may not want to log every incoming message in production, but it's good for testing
+
+    if data["object"] == "page":
+
+        for entry in data["entry"]:
+            for messaging_event in entry["messaging"]:
+
+                if messaging_event.get("message"):  # someone sent us a message
+                    if "attachments" in messaging_event['message']:
+                        if messaging_event['message']['attachments'][0]['type'] == "image":
+                            image_url = messaging_event['message']['attachments'][0]['payload']['url']
+                            b=0
+                            c=0
+                            d=0
+                            short_img_url = short_url(image_url)
+                            correct_url = 'http://api.havenondemand.com/1/api/async/ocrdocument/v1?apikey=d8023014-ab1d-4831-9b2f-7b9946932405&url='+short_img_url
+                            ptext= requests.get(correct_url)
+                            job=json.loads(ptext.text)
+                            data= requests.get('http://api.havenondemand.com/1/job/result/%s?apikey=d8023014-ab1d-4831-9b2f-7b9946932405' %job['jobID'])
+                            dataload=json.loads(data.text)
+                            try:
+                                if ((((dataload['actions'])[0]['result'])['text_block'])[0]['text']):
+                                    impdata=((((dataload['actions'])[0]['result'])['text_block'])[0]['text'])
+                                    text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+impdata+'&tt=a&uw=y')
+                                    textp=json.loads(text1.text)
+                                    print(textp)
+                                    if textp['time_expression_list']:
+                                        for t in textp['time_expression_list']:
+                                            if (t['precision'] == "day" or t['precision'] == "weekday") and b==0:
+                                                dates = t['actual_time']
+                                                rtime = dates.split('-')
+                                                evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                                nowdate = datetime.datetime.now().date()
+                                                a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
+                                                if a[0]<0 :
+                                                    send_message(messaging_event["sender"]["id"], "Sir, you are late!")
+                                                    d=1
+                                                else:
+                                                    b=1
+
+                                            if (t['precision']=='minutesAMPM' or t['precision']=='hourAMPM') and c==0:
+                                                times=t['actual_time']
+                                                times=times.split(' ')
+                                                times=times[0].split(':')
+                                                c=1
+
+
+
+
+                                        if b==1 and c==1:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                        elif b==0 and c==1 and d!=1:
+                                            send_message(messaging_event["sender"]["id"], "I can't read date sir! Can you tell me the date and name of event?")
+                                        elif b==1 and c==0:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+
+                                    else:
+                                        send_message(messaging_event["sender"]["id"], "I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
+                            except IndexError:
+                                send_message(messaging_event["sender"]["id"],"I have grown old! I can't read your image sir. sorry :( Can you tell me the date and name of event?")
+                    elif (messaging_event["message"]["text"]=="subscribe" or messaging_event["message"]["text"]=="Subscribe"):
+                        query=Subscriber.query.filter_by(sub_id=messaging_event["sender"]["id"]).first()
+                        if query is None:
+                            sub=Subscriber(sub_id=messaging_event["sender"]["id"])
+                            db.session.add(sub)
+                            db.session.commit()
+                            a=Subscriber.query.all()
+                            a=len(a)
+                            print(a)
+                            send_message(messaging_event["sender"]["id"],"You are subscriber no "+str(a)+" sir! thanks")
+                        else:
+                            send_message(messaging_event["sender"]["id"],"You are already subscribed sir!")
+
+                    else:
+
+                        text1=requests.get('http://api.meaningcloud.com/topics-2.0?key=26f841b83b15255990e9a1cfed9a47a9&of=json&lang=en&ilang=en&txt='+messaging_event["message"]["text"]+'&tt=a&uw=y')
+                        textp=json.loads(text1.text)
+                        print(textp)
+                        b=0
+                        c=0
+                        d=0
+                        try:
+                            if textp['time_expression_list']:
+                                for t in textp['time_expression_list']:
+
+                                    if ((t['precision'] == "day") or (t['precision'] == "weekday")) and b==0:
+                                        dates = t['actual_time']
+                                        rtime = dates.split('-')
+                                        evedate=date(int(rtime[0]),int(rtime[1]),int(rtime[2]))
+                                        nowdate = datetime.datetime.now().date()
+                                        a=divmod((evedate-nowdate).days* 86400+ (evedate-nowdate).seconds , 60)
+                                        if a[0]<0 :
+                                            send_message(messaging_event["sender"]["id"], "Sir, you are late!")
+                                            d=1
+                                        else:
+                                            b=1
+
+                                    if ((t['precision']=='minutesAMPM') or (t['precision']=='hourAMPM')) and c==0:
+                                        times=t['actual_time']
+                                        times=times.split(' ')
+                                        times=times[0].split(':')
+                                        c=1
+
+                                if textp['entity_list']:
+                                    for e in textp['entity_list']:
+                                        event= e['form']
+                                        if b==1 and c==1:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                        elif b==0 and c==1 and d!=1:
+                                            send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
+                                        elif b==1 and c==0:
+                                            eve=Event(sender_id= messaging_event["sender"]["id"],name=event,date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                            db.session.add(eve)
+                                            db.session.commit()
+                                            send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+
+
+                                else:
+                                    if b==1 and c==1:
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),int(times[0]),int(times[1]),int(times[2])))
+                                        db.session.add(eve)
+                                        print('hello')
+                                        db.session.commit()
+                                        send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                                    elif b==0 and c==1 and d!=1:
+                                        send_message(messaging_event["sender"]["id"], "Sir, please mention today if it's today's reminder!")
+                                    elif b==1 and c==0:
+                                        eve=Event(sender_id= messaging_event["sender"]["id"],date=datetime.datetime(int(rtime[0]),int(rtime[1]),int(rtime[2]),2,0,0))
+                                        db.session.add(eve)
+                                        db.session.commit()
+                                        send_message(messaging_event["sender"]["id"], "thank you sir, noted!")
+                            else:
+                                main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+                        except KeyError:
+                            main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
+
+
+
+
+
+
+
+
+                if messaging_event.get("delivery"):  # delivery confirmation
+                    pass
+                if messaging_event.get("optin"):  # optin confirmation
+                    pass
+                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
+                    pass
+                all_reminders = Event.query.all()
+                for i in all_reminders:
+                    if i.reminded==False:
+                        event_date = i.date
+                        nowdate = datetime.datetime.today()
+                        e=divmod((event_date-nowdate).days* 86400+ (event_date-nowdate).seconds , 60)
+                        if (e[0]<450) and (e[0]>330) :
+                            timeleft= (e[0]-330)/60.0
+                            hr=timeleft-(timeleft%1)
+                            mi=round((timeleft%1)*60,0)
+                            senderid = i.sender_id
+                            reminder_message = "Sir, you have a " + i.name + " after "+str(hr)+" hours and "+str(mi)+" minutes!"
+                            send_message(senderid, reminder_message)
+                            i.reminded=True
+                            db.session.add(i)
+                            db.session.commit()
+                        elif e[0]<330:
+                            i.reminded=True
+                            send_message(i.sender_id,"sir, your "+ i.name +" is over already!")
+                            db.session.add(i)
+                            db.session.commit()
+
+
+    return "ok", 200
+
+
+
 
 def send_message(recipient_id, message_text):
 
@@ -78,79 +285,14 @@ def send_message(recipient_id, message_text):
         log(r.status_code)
         log(r.text)
 
-@app.route('/', methods=['POST'])
-def webhook():
-
-    # endpoint for processing incoming messaging events
-
-    data = request.get_json()
-    log(data)  # you may not want to log every incoming message in production, but it's good for testing
-
-    if data["object"] == "page":
-        for entry in data["entry"]:
-            for messaging_event in entry["messaging"]:
-                if messaging_event.get("message"):  # someone sent us a message
-                    print 'Got message'
-                    currentuser = db.user.find_one({ 'user_id' : messaging_event["sender"]["id"] })
-                    if currentuser is None :
-                        print 'User not found'
-                        db.user.insert_one({ "user_id" : messaging_event["sender"]["id"], "adm_no" : 0 })
-                        print 'inserted'
-                        send_message(messaging_event["sender"]["id"], "Can I know your roll no??")
-                    elif currentuser and currentuser["adm_no"] == 0 and messaging_event["sender"]["id"] != 1851054981802215:
-                        db.user.update({"_id" : currentuser["_id"]} ,{"adm_no" : str.lower(str(messaging_event["message"]["text"])), "user_id" : messaging_event["sender"]["id"]}, upsert = False)
-                        send_message(messaging_event["sender"]["id"], 'You are now part of alfred SVNIT notification system.')
-                    else:
-                        print "api.ai here."
-                        print messaging_event["message"]["text"]
-                        print messaging_event["sender"]["id"]
-                        main(messaging_event["message"]["text"],messaging_event["sender"]["id"])
-
-                if messaging_event.get("delivery"):  # delivery confirmation
-                    pass
-                if messaging_event.get("optin"):  # optin confirmation
-                    pass
-                if messaging_event.get("postback"):  # user clicked/tapped "postback" button in earlier message
-                    pass
-
+@app.route('/<message>', methods=['GET','POST'])
+def mass(message):
+    subs=Subscriber.query.all()
+    for user in subs:
+        send_message(user.sub_id,message)
     return "ok", 200
 
-@app.route('/sent', methods = ['GET', 'POST'])
-def mass():
-    print 'received'
-    users = db.user
-    notification = str(request.form.get('notification'))
-    branchDropdown = str(request.form.get('dropdown-branch'))
-    yearDropdown = str(request.form.get('dropdown-year'))
-    if branchDropdown != 'all' and yearDropdown != 'all':
-        for u in users.find():
-            if str.lower(branchDropdown) in u["adm_no"]:
-                if yearDropdown in u["adm_no"]:
-                    send_message(int(u["user_id"]), notification)
-                    return "Notification sent successfully", 200
-    if branchDropdown != 'all' and yearDropdown == 'all':
-        for u in users.find():
-            if branchDropdown in u["adm_no"]:
-                send_message(int(u["user_id"]), notification)
-                return "Notification sent successfully", 200
 
-    if branchDropdown == 'all' and yearDropdown != 'all':
-        for u in user.find():
-            if yearDropdown in u["adm_no"]:
-                send_message(int(u["user_id"]), notification)
-                return 'Notification sent successfully', 200
-    if branchDropdown == 'all' and yearDropdown == 'all':
-        for u in users.find():
-            send_message(int(u["user_id"]), notification)
-            return 'Notification sent successfully', 200
-
-@app.route('/sendNotification', methods = ['GET', 'POST'])
-def send():
-    return render_template('index.html')
-
-@app.route('/privacy')
-def privacy():
-    return render_template('privacy.html')
 
 def log(message):  # simple wrapper for logging to stdout on heroku
     print str(message)
